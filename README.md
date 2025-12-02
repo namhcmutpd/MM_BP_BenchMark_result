@@ -114,13 +114,13 @@ Trong khi BFS/DFS lãng phí 0.846 MB
 
 ### 3. **Tính Nhất Quán**
 
-- ✅ **100% các mạng** có kết quả nhất quán giữa ba thuật toán (cùng tìm ra số trạng thái)
+-  **100% các mạng** có kết quả nhất quán giữa ba thuật toán (cùng tìm ra số trạng thái)
 - **Ngoại lệ**: File `input4.pnml` - BFS không thể xử lý (do yêu cầu 1-safe net)
 - **Kết luận:** Độ tin cậy của BDD được chứng minh hoàn toàn
 
 ## 💡 Phân Tích Chi Tiết Về BDD
 
-### ✅ **Ưu Điểm Nổi Bật Của BDD**
+###  **Ưu Điểm Nổi Bật Của BDD**
 
 #### **1. Hiệu Suất Vượt Trội Trên Mạng Có Cấu Trúc Đều Đặn**
 
@@ -166,11 +166,11 @@ Phương pháp Explicit không thể làm được điều này hiệu quả.
 
 #### **5. Hoàn toàn Đáng Tin Cậy**
 
-- ✅ **100% kết quả nhất quán** với các phương pháp khác
+-  **100% kết quả nhất quán** với các phương pháp khác
 - Không có lỗi làm tròn hay mất mát dữ liệu
 - Độ chính xác toán học được bảo đảm
 
-### ❌ **Hạn Chế Của BDD (Cần Cải Thiện)**
+###  **Hạn Chế Của BDD (Cần Cải Thiện)**
 
 Mặc dù BDD mạnh mẽ, vẫn có một số khó khăn cần giải quyết:
 
@@ -243,11 +243,11 @@ Kích thước mạng        | BDD Performance
 ### 📌 **Khuyến Nghị Sử Dụng**
 
 #### **1. Dùng BDD Khi:**
-- ✅ Phân tích mạng **lớn hoặc rất lớn** (> 500 states)
-- ✅ Bộ nhớ **bị giới hạn** (hệ thống nhúng, edge computing)
-- ✅ Cần **hỗ trợ temporal logic** hoặc các phép toán logic phức tạp
-- ✅ Dự kiến mạng sẽ **phát triển lớn** trong tương lai
-- ✅ Cần **tính chính xác toán học tuyệt đối**
+-  Phân tích mạng **lớn hoặc rất lớn** (> 500 states)
+-  Bộ nhớ **bị giới hạn** (hệ thống nhúng, edge computing)
+-  Cần **hỗ trợ temporal logic** hoặc các phép toán logic phức tạp
+-  Dự kiến mạng sẽ **phát triển lớn** trong tương lai
+-  Cần **tính chính xác toán học tuyệt đối**
 
 **Ví dụ thực tế:**
 - Model checking các hệ thống song song khổng lồ (distributed systems)
@@ -255,10 +255,10 @@ Kích thước mạng        | BDD Performance
 - Phân tích deadlock-freedom trên mạng Petri enterprise
 
 #### **2. Dùng DFS/BFS Khi:**
-- ✅ Mạng **nhỏ hoặc trung bình** (< 500 states)
-- ✅ Cần **tốc độ tuyệt đối** (real-time systems)
-- ✅ Đội ngũ **không có chuyên môn sâu về BDD**
-- ✅ Cần **code đơn giản, dễ debug**
+-  Mạng **nhỏ hoặc trung bình** (< 500 states)
+-  Cần **tốc độ tuyệt đối** (real-time systems)
+-  Đội ngũ **không có chuyên môn sâu về BDD**
+-  Cần **code đơn giản, dễ debug**
 
 **Ví dụ thực tế:**
 - Test cấu hình hoạt động của workflow đơn giản
@@ -354,13 +354,13 @@ KIẾN NGHỊ:
 ## 📝 Ghi Chú Về Benchmark
 
 ### Cấu Hình Test
-- **Ngôn ngữ:** Python 3.x
-- **Thư viện BDD:** Custom implementation (dd module hoặc tương tự)
+- **Ngôn ngữ:** Python 3.13
+- **Thư viện BDD:** pyEDA
 - **Phương pháp đo:** tracemalloc + time.perf_counter()
 - **Số lần chạy:** 1 lần trên mỗi mạng (có thể tăng lên để độ tin cậy cao hơn)
 
 ### Giới Hạn
-- Test trên máy tính thông thường (không có GPU)
+- Test trên máy tính thông thường 
 - Chưa optimize variable ordering
 - BDD chưa được parallel hoá
 
@@ -368,7 +368,7 @@ KIẾN NGHỊ:
 
 **Ngày tạo báo cáo**: 02/12/2025  
 **Tổng số mạng được test**: 17 mạng  
-**Trạng thái**: ✅ Hoàn Thành
+**Trạng thái**:  Hoàn Thành
 
-**Tác giả:** Nhóm Phân Tích Thuật Toán Petri Net  
+**Tác giả:** Hoàng Nam & Thế Lộc   
 **Tiêu chí đánh giá chính:** Hiệu suất BDD trên mạng lớn và phức tạp

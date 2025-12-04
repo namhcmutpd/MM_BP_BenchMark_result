@@ -17,7 +17,7 @@ Dự án này thực hiện benchmark so sánh hiệu suất của **BDD (Binary
 - `run_all.py` - Script Python để chạy benchmark trên tất cả các file `.pnml`
 
 ## 🧪 Quy Trình Thử Nghiệm
-
+- **Chạy test bằng lệnh : `python test_benchmark.py`**
 ### Mạng Petri Được Test
 
 Tổng cộng **17 file Petri Net (.pnml)** được test, bao gồm:

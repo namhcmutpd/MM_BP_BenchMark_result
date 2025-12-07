@@ -1,39 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
-  <net id="mutex_1safe" type="http://www.pnml.org/version-2009/grammar/ptnet">
-    <name>
-      <text>Two-process mutual exclusion (1-safe)</text>
-    </name>
+  <net id="mutex2_1safe" type="http://www.pnml.org/version-2009/grammar/ptnet">
+    <name><text>Two-process mutual exclusion (1-safe)</text></name>
 
     <page id="page1">
 
       <!-- Places -->
-      <place id="p_idle1">
+      <place id="p1_idle">
         <name><text>P1_idle</text></name>
         <initialMarking><text>1</text></initialMarking>
       </place>
 
-      <place id="p_wait1">
-        <name><text>P1_wait</text></name>
-        <initialMarking><text>0</text></initialMarking>
-      </place>
-
-      <place id="p_cs1">
+      <place id="p1_cs">
         <name><text>P1_cs</text></name>
         <initialMarking><text>0</text></initialMarking>
       </place>
 
-      <place id="p_idle2">
+      <place id="p2_idle">
         <name><text>P2_idle</text></name>
         <initialMarking><text>1</text></initialMarking>
       </place>
 
-      <place id="p_wait2">
-        <name><text>P2_wait</text></name>
-        <initialMarking><text>0</text></initialMarking>
-      </place>
-
-      <place id="p_cs2">
+      <place id="p2_cs">
         <name><text>P2_cs</text></name>
         <initialMarking><text>0</text></initialMarking>
       </place>
@@ -44,20 +32,12 @@
       </place>
 
       <!-- Transitions -->
-      <transition id="t1_request">
-        <name><text>P1_request_cs</text></name>
-      </transition>
-
       <transition id="t1_enter">
         <name><text>P1_enter_cs</text></name>
       </transition>
 
       <transition id="t1_exit">
         <name><text>P1_exit_cs</text></name>
-      </transition>
-
-      <transition id="t2_request">
-        <name><text>P2_request_cs</text></name>
       </transition>
 
       <transition id="t2_enter">
@@ -68,68 +48,44 @@
         <name><text>P2_exit_cs</text></name>
       </transition>
 
-      <!-- Arcs for Process 1 -->
-      <arc id="a_p_idle1_t1_request" source="p_idle1" target="t1_request">
+      <!-- Arcs P1 -->
+      <arc id="a_p1_idle_mutex_t1_enter" source="p1_idle" target="t1_enter">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_p_mutex_t1_enter" source="p_mutex" target="t1_enter">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t1_enter_p1_cs" source="t1_enter" target="p1_cs">
         <inscription><text>1</text></inscription>
       </arc>
 
-      <arc id="a_p_mutex_t1_request" source="p_mutex" target="t1_request">
+      <arc id="a_p1_cs_t1_exit" source="p1_cs" target="t1_exit">
         <inscription><text>1</text></inscription>
       </arc>
-
-      <arc id="a_t1_request_p_wait1" source="t1_request" target="p_wait1">
+      <arc id="a_t1_exit_p1_idle" source="t1_exit" target="p1_idle">
         <inscription><text>1</text></inscription>
       </arc>
-
-      <arc id="a_p_wait1_t1_enter" source="p_wait1" target="t1_enter">
-        <inscription><text>1</text></inscription>
-      </arc>
-
-      <arc id="a_t1_enter_p_cs1" source="t1_enter" target="p_cs1">
-        <inscription><text>1</text></inscription>
-      </arc>
-
-      <arc id="a_p_cs1_t1_exit" source="p_cs1" target="t1_exit">
-        <inscription><text>1</text></inscription>
-      </arc>
-
-      <arc id="a_t1_exit_p_idle1" source="t1_exit" target="p_idle1">
-        <inscription><text>1</text></inscription>
-      </arc>
-
       <arc id="a_t1_exit_p_mutex" source="t1_exit" target="p_mutex">
         <inscription><text>1</text></inscription>
       </arc>
 
-      <!-- Arcs for Process 2 -->
-      <arc id="a_p_idle2_t2_request" source="p_idle2" target="t2_request">
+      <!-- Arcs P2 -->
+      <arc id="a_p2_idle_mutex_t2_enter" source="p2_idle" target="t2_enter">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_p_mutex_t2_enter" source="p_mutex" target="t2_enter">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t2_enter_p2_cs" source="t2_enter" target="p2_cs">
         <inscription><text>1</text></inscription>
       </arc>
 
-      <arc id="a_p_mutex_t2_request" source="p_mutex" target="t2_request">
+      <arc id="a_p2_cs_t2_exit" source="p2_cs" target="t2_exit">
         <inscription><text>1</text></inscription>
       </arc>
-
-      <arc id="a_t2_request_p_wait2" source="t2_request" target="p_wait2">
+      <arc id="a_t2_exit_p2_idle" source="t2_exit" target="p2_idle">
         <inscription><text>1</text></inscription>
       </arc>
-
-      <arc id="a_p_wait2_t2_enter" source="p_wait2" target="t2_enter">
-        <inscription><text>1</text></inscription>
-      </arc>
-
-      <arc id="a_t2_enter_p_cs2" source="t2_enter" target="p_cs2">
-        <inscription><text>1</text></inscription>
-      </arc>
-
-      <arc id="a_p_cs2_t2_exit" source="p_cs2" target="t2_exit">
-        <inscription><text>1</text></inscription>
-      </arc>
-
-      <arc id="a_t2_exit_p_idle2" source="t2_exit" target="p_idle2">
-        <inscription><text>1</text></inscription>
-      </arc>
-
       <arc id="a_t2_exit_p_mutex" source="t2_exit" target="p_mutex">
         <inscription><text>1</text></inscription>
       </arc>

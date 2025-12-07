@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+  <net id="fork_join_1safe" type="http://www.pnml.org/version-2009/grammar/ptnet">
+    <name><text>Parallel fork/join (1-safe)</text></name>
+
+    <page id="page1">
+
+      <!-- Places -->
+      <place id="p_start">
+        <name><text>Start</text></name>
+        <initialMarking><text>1</text></initialMarking>
+      </place>
+
+      <place id="p_branch1">
+        <name><text>Branch1</text></name>
+        <initialMarking><text>0</text></initialMarking>
+      </place>
+
+      <place id="p_branch2">
+        <name><text>Branch2</text></name>
+        <initialMarking><text>0</text></initialMarking>
+      </place>
+
+      <place id="p_done">
+        <name><text>Done</text></name>
+        <initialMarking><text>0</text></initialMarking>
+      </place>
+
+      <!-- Transitions -->
+      <transition id="t_fork">
+        <name><text>Fork</text></name>
+      </transition>
+
+      <transition id="t_join">
+        <name><text>Join</text></name>
+      </transition>
+
+      <!-- Arcs -->
+      <!-- Fork: Start -> Branch1 + Branch2 -->
+      <arc id="a_start_fork" source="p_start" target="t_fork">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_fork_b1" source="t_fork" target="p_branch1">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_fork_b2" source="t_fork" target="p_branch2">
+        <inscription><text>1</text></inscription>
+      </arc>
+
+      <!-- Join: Branch1 + Branch2 -> Done -->
+      <arc id="a_b1_join" source="p_branch1" target="t_join">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_b2_join" source="p_branch2" target="t_join">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_join_done" source="t_join" target="p_done">
+        <inscription><text>1</text></inscription>
+      </arc>
+
+    </page>
+  </net>
+</pnml>

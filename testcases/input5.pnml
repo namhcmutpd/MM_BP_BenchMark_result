@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+  <net id="deadlock_resources_1safe" type="http://www.pnml.org/version-2009/grammar/ptnet">
+    <name><text>Two-process, two-resource deadlock (1-safe)</text></name>
+
+    <page id="page1">
+
+      <!-- Places -->
+      <place id="p1_idle">
+        <name><text>P1_idle</text></name>
+        <initialMarking><text>1</text></initialMarking>
+      </place>
+
+      <place id="p1_hasA">
+        <name><text>P1_has_A</text></name>
+        <initialMarking><text>0</text></initialMarking>
+      </place>
+
+      <place id="p1_hasAB">
+        <name><text>P1_has_A_B</text></name>
+        <initialMarking><text>0</text></initialMarking>
+      </place>
+
+      <place id="p2_idle">
+        <name><text>P2_idle</text></name>
+        <initialMarking><text>1</text></initialMarking>
+      </place>
+
+      <place id="p2_hasB">
+        <name><text>P2_has_B</text></name>
+        <initialMarking><text>0</text></initialMarking>
+      </place>
+
+      <place id="p2_hasBA">
+        <name><text>P2_has_B_A</text></name>
+        <initialMarking><text>0</text></initialMarking>
+      </place>
+
+      <place id="p_resA_free">
+        <name><text>ResA_free</text></name>
+        <initialMarking><text>1</text></initialMarking>
+      </place>
+
+      <place id="p_resB_free">
+        <name><text>ResB_free</text></name>
+        <initialMarking><text>1</text></initialMarking>
+      </place>
+
+      <!-- Transitions -->
+      <!-- P1: get A -> get B -> release both -->
+      <transition id="t1_getA">
+        <name><text>P1_get_A</text></name>
+      </transition>
+
+      <transition id="t1_getB">
+        <name><text>P1_get_B</text></name>
+      </transition>
+
+      <transition id="t1_release">
+        <name><text>P1_release_AB</text></name>
+      </transition>
+
+      <!-- P2: get B -> get A -> release both -->
+      <transition id="t2_getB">
+        <name><text>P2_get_B</text></name>
+      </transition>
+
+      <transition id="t2_getA">
+        <name><text>P2_get_A</text></name>
+      </transition>
+
+      <transition id="t2_release">
+        <name><text>P2_release_BA</text></name>
+      </transition>
+
+      <!-- Arcs P1 -->
+      <arc id="a_p1_idle_resA_t1_getA" source="p1_idle" target="t1_getA">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_resA_t1_getA" source="p_resA_free" target="t1_getA">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t1_getA_p1_hasA" source="t1_getA" target="p1_hasA">
+        <inscription><text>1</text></inscription>
+      </arc>
+
+      <arc id="a_p1_hasA_resB_t1_getB" source="p1_hasA" target="t1_getB">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_resB_t1_getB" source="p_resB_free" target="t1_getB">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t1_getB_p1_hasAB" source="t1_getB" target="p1_hasAB">
+        <inscription><text>1</text></inscription>
+      </arc>
+
+      <arc id="a_p1_hasAB_t1_release" source="p1_hasAB" target="t1_release">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t1_release_p1_idle" source="t1_release" target="p1_idle">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t1_release_resA" source="t1_release" target="p_resA_free">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t1_release_resB" source="t1_release" target="p_resB_free">
+        <inscription><text>1</text></inscription>
+      </arc>
+
+      <!-- Arcs P2 -->
+      <arc id="a_p2_idle_resB_t2_getB" source="p2_idle" target="t2_getB">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_resB_t2_getB" source="p_resB_free" target="t2_getB">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t2_getB_p2_hasB" source="t2_getB" target="p2_hasB">
+        <inscription><text>1</text></inscription>
+      </arc>
+
+      <arc id="a_p2_hasB_resA_t2_getA" source="p2_hasB" target="t2_getA">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_resA_t2_getA" source="p_resA_free" target="t2_getA">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t2_getA_p2_hasBA" source="t2_getA" target="p2_hasBA">
+        <inscription><text>1</text></inscription>
+      </arc>
+
+      <arc id="a_p2_hasBA_t2_release" source="p2_hasBA" target="t2_release">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t2_release_p2_idle" source="t2_release" target="p2_idle">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t2_release_resA" source="t2_release" target="p_resA_free">
+        <inscription><text>1</text></inscription>
+      </arc>
+      <arc id="a_t2_release_resB" source="t2_release" target="p_resB_free">
+        <inscription><text>1</text></inscription>
+      </arc>
+
+    </page>
+  </net>
+</pnml>

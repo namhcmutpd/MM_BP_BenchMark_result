@@ -1,142 +1,89 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
-  <net id="SwimmingPool-PT-10" type="http://www.pnml.org/version-2009/grammar/ptnet">
-    <page id="page0">
-      <name>
-        <text>DefaultPage</text>
-      </name>
-      <transition id="GetK">
-        <name>
-          <text>GetK</text>
-        </name>
-      </transition>
-      <place id="Entered">
-        <name>
-          <text>Entered</text>
-        </name>
-      </place>
-      <transition id="GetB">
-        <name>
-          <text>GetB</text>
-        </name>
-      </transition>
-      <place id="WaitBag">
-        <name>
-          <text>WaitBag</text>
-        </name>
-      </place>
-      <transition id="RelK">
-        <name>
-          <text>RelK</text>
-        </name>
-      </transition>
-      <place id="Undress">
-        <name>
-          <text>Undress</text>
-        </name>
-      </place>
-      <transition id="GetK2">
-        <name>
-          <text>GetK2</text>
-        </name>
-      </transition>
-      <place id="InBath">
-        <name>
-          <text>InBath</text>
-        </name>
-      </place>
-      <transition id="RBag">
-        <name>
-          <text>RBag</text>
-        </name>
-      </transition>
-      <place id="Dress">
-        <name>
-          <text>Dress</text>
-        </name>
-      </place>
-      <transition id="RKey">
-        <name>
-          <text>RKey</text>
-        </name>
-      </transition>
-      <place id="Dressed">
-        <name>
-          <text>Dressed</text>
-        </name>
-      </place>
-      <transition id="Enter">
-        <name>
-          <text>Enter</text>
-        </name>
-      </transition>
-      <place id="Out">
-        <name>
-          <text>Out</text>
-        </name>
-        <initialMarking>
-          <text>200</text>
-        </initialMarking>
-      </place>
-      <place id="Cabins">
-        <name>
-          <text>Cabins</text>
-        </name>
-        <initialMarking>
-          <text>100</text>
-        </initialMarking>
-      </place>
-      <place id="Bags">
-        <name>
-          <text>Bags</text>
-        </name>
-        <initialMarking>
-          <text>150</text>
-        </initialMarking>
-      </place>
-      <arc id="cId-561568531826416786328" source="Dressed" target="RKey">
-      </arc>
-      <arc id="cId-561568531826416786318" source="Entered" target="GetK">
-      </arc>
-      <arc id="cId-561238034753583231129" source="RKey" target="Out">
-      </arc>
-      <arc id="cId-561238034753583231119" source="GetK" target="WaitBag">
-      </arc>
-      <arc id="cId-562064277220918754330" source="Out" target="Enter">
-      </arc>
-      <arc id="cId-562064277220918754320" source="WaitBag" target="GetB">
-      </arc>
-      <arc id="cId-562064277220918754331" source="Enter" target="Entered">
-      </arc>
-      <arc id="cId-562064277220918754321" source="GetB" target="Undress">
-      </arc>
-      <arc id="cId-562064277220918754333" source="RelK" target="Cabins">
-      </arc>
-      <arc id="cId-562064277220918754322" source="Undress" target="RelK">
-      </arc>
-      <arc id="cId-562064277220918754334" source="Cabins" target="GetK2">
-      </arc>
-      <arc id="cId-562064277220918754323" source="RelK" target="InBath">
-      </arc>
-      <arc id="cId-562064277220918754335" source="RKey" target="Cabins">
-      </arc>
-      <arc id="cId-562064277220918754324" source="InBath" target="GetK2">
-      </arc>
-      <arc id="cId-562064277220918754336" source="Bags" target="GetB">
-      </arc>
-      <arc id="cId-562064277220918754325" source="GetK2" target="Dress">
-      </arc>
-      <arc id="cId-562064277220918754337" source="RBag" target="Bags">
-      </arc>
-      <arc id="cId-562064277220918754326" source="Dress" target="RBag">
-      </arc>
-      <arc id="cId-562064277220918754348" source="Cabins" target="GetK">
-      </arc>
-      <arc id="cId-562064277220918754327" source="RBag" target="Dressed">
-      </arc>
-    </page>
-    <name>
-      <text>SwimmingPool-PT-10</text>
-    </name>
-  </net>
+ <net id="n-3072" type="http://www.pnml.org/version-2009/grammar/ptnet">
+  <page id="g-3072">
+   <place id="p0_on"> <name><text>p0_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p0_off"> <name><text>p0_off</text></name> </place>
+   <transition id="t0_to_off"> <name><text>t0_to_off</text></name> </transition>
+   <transition id="t0_to_on"> <name><text>t0_to_on</text></name> </transition>
+   <arc id="a0_1" source="p0_on" target="t0_to_off"/> <arc id="a0_2" source="t0_to_off" target="p0_off"/>
+   <arc id="a0_3" source="p0_off" target="t0_to_on"/> <arc id="a0_4" source="t0_to_on" target="p0_on"/>
+
+   <place id="p1_on"> <name><text>p1_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p1_off"> <name><text>p1_off</text></name> </place>
+   <transition id="t1_to_off"> <name><text>t1_to_off</text></name> </transition>
+   <transition id="t1_to_on"> <name><text>t1_to_on</text></name> </transition>
+   <arc id="a1_1" source="p1_on" target="t1_to_off"/> <arc id="a1_2" source="t1_to_off" target="p1_off"/>
+   <arc id="a1_3" source="p1_off" target="t1_to_on"/> <arc id="a1_4" source="t1_to_on" target="p1_on"/>
+
+   <place id="p2_on"> <name><text>p2_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p2_off"> <name><text>p2_off</text></name> </place>
+   <transition id="t2_to_off"> <name><text>t2_to_off</text></name> </transition>
+   <transition id="t2_to_on"> <name><text>t2_to_on</text></name> </transition>
+   <arc id="a2_1" source="p2_on" target="t2_to_off"/> <arc id="a2_2" source="t2_to_off" target="p2_off"/>
+   <arc id="a2_3" source="p2_off" target="t2_to_on"/> <arc id="a2_4" source="t2_to_on" target="p2_on"/>
+
+   <place id="p3_on"> <name><text>p3_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p3_off"> <name><text>p3_off</text></name> </place>
+   <transition id="t3_to_off"> <name><text>t3_to_off</text></name> </transition>
+   <transition id="t3_to_on"> <name><text>t3_to_on</text></name> </transition>
+   <arc id="a3_1" source="p3_on" target="t3_to_off"/> <arc id="a3_2" source="t3_to_off" target="p3_off"/>
+   <arc id="a3_3" source="p3_off" target="t3_to_on"/> <arc id="a3_4" source="t3_to_on" target="p3_on"/>
+
+   <place id="p4_on"> <name><text>p4_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p4_off"> <name><text>p4_off</text></name> </place>
+   <transition id="t4_to_off"> <name><text>t4_to_off</text></name> </transition>
+   <transition id="t4_to_on"> <name><text>t4_to_on</text></name> </transition>
+   <arc id="a4_1" source="p4_on" target="t4_to_off"/> <arc id="a4_2" source="t4_to_off" target="p4_off"/>
+   <arc id="a4_3" source="p4_off" target="t4_to_on"/> <arc id="a4_4" source="t4_to_on" target="p4_on"/>
+
+   <place id="p5_on"> <name><text>p5_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p5_off"> <name><text>p5_off</text></name> </place>
+   <transition id="t5_to_off"> <name><text>t5_to_off</text></name> </transition>
+   <transition id="t5_to_on"> <name><text>t5_to_on</text></name> </transition>
+   <arc id="a5_1" source="p5_on" target="t5_to_off"/> <arc id="a5_2" source="t5_to_off" target="p5_off"/>
+   <arc id="a5_3" source="p5_off" target="t5_to_on"/> <arc id="a5_4" source="t5_to_on" target="p5_on"/>
+
+   <place id="p6_on"> <name><text>p6_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p6_off"> <name><text>p6_off</text></name> </place>
+   <transition id="t6_to_off"> <name><text>t6_to_off</text></name> </transition>
+   <transition id="t6_to_on"> <name><text>t6_to_on</text></name> </transition>
+   <arc id="a6_1" source="p6_on" target="t6_to_off"/> <arc id="a6_2" source="t6_to_off" target="p6_off"/>
+   <arc id="a6_3" source="p6_off" target="t6_to_on"/> <arc id="a6_4" source="t6_to_on" target="p6_on"/>
+
+   <place id="p7_on"> <name><text>p7_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p7_off"> <name><text>p7_off</text></name> </place>
+   <transition id="t7_to_off"> <name><text>t7_to_off</text></name> </transition>
+   <transition id="t7_to_on"> <name><text>t7_to_on</text></name> </transition>
+   <arc id="a7_1" source="p7_on" target="t7_to_off"/> <arc id="a7_2" source="t7_to_off" target="p7_off"/>
+   <arc id="a7_3" source="p7_off" target="t7_to_on"/> <arc id="a7_4" source="t7_to_on" target="p7_on"/>
+
+   <place id="p8_on"> <name><text>p8_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p8_off"> <name><text>p8_off</text></name> </place>
+   <transition id="t8_to_off"> <name><text>t8_to_off</text></name> </transition>
+   <transition id="t8_to_on"> <name><text>t8_to_on</text></name> </transition>
+   <arc id="a8_1" source="p8_on" target="t8_to_off"/> <arc id="a8_2" source="t8_to_off" target="p8_off"/>
+   <arc id="a8_3" source="p8_off" target="t8_to_on"/> <arc id="a8_4" source="t8_to_on" target="p8_on"/>
+
+   <place id="p9_on"> <name><text>p9_on</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p9_off"> <name><text>p9_off</text></name> </place>
+   <transition id="t9_to_off"> <name><text>t9_to_off</text></name> </transition>
+   <transition id="t9_to_on"> <name><text>t9_to_on</text></name> </transition>
+   <arc id="a9_1" source="p9_on" target="t9_to_off"/> <arc id="a9_2" source="t9_to_off" target="p9_off"/>
+   <arc id="a9_3" source="p9_off" target="t9_to_on"/> <arc id="a9_4" source="t9_to_on" target="p9_on"/>
+
+   <place id="p_c0"> <name><text>p_c0</text></name> <initialMarking><text>1</text></initialMarking> </place>
+   <place id="p_c1"> <name><text>p_c1</text></name> </place>
+   <place id="p_c2"> <name><text>p_c2</text></name> </place>
+
+   <transition id="t_c0"> <name><text>t_c0</text></name> </transition>
+   <transition id="t_c1"> <name><text>t_c1</text></name> </transition>
+   <transition id="t_c2"> <name><text>t_c2</text></name> </transition>
+
+   <arc id="ac_1" source="p_c0" target="t_c0"/> <arc id="ac_2" source="t_c0" target="p_c1"/>
+   <arc id="ac_3" source="p_c1" target="t_c1"/> <arc id="ac_4" source="t_c1" target="p_c2"/>
+   <arc id="ac_5" source="p_c2" target="t_c2"/> <arc id="ac_6" source="t_c2" target="p_c0"/>
+
+  </page>
+ </net>
 </pnml>

@@ -1,13 +1,13 @@
-# BÁO CÁO TASK 3: SO SÁNH HIỆU SUẤT PHƯƠNG PHÁP BDD VÀ EXPLICIT TRONG PHÂN TÍCH KHẢ NĂNG ĐẠT ĐƯỢC (REACHABILITY ANALYSIS) CỦA PETRI NET
+# BÁO CÁO TASK 3: SO SÁNH HIỆU SUẤT PHƯƠNG PHÁP BDD VÀ EXPLICIT TRONG PHÂN TÍCH REACHABILITY ANALYSIS TRONG PETRI NET
 
 ## 1. Giới thiệu
 
-Báo cáo này trình bày kết quả so sánh hiệu suất giữa hai phương pháp phân tích khả năng đạt được (Reachability Analysis) trên mô hình Petri Net:
+Báo cáo này trình bày kết quả so sánh hiệu suất giữa hai phương pháp phân tích Reachability Analysis trên mô hình Petri Net:
 
 - **Phương pháp Symbolic (BDD - Binary Decision Diagram)**: Sử dụng cấu trúc dữ liệu BDD để biểu diễn và thao tác trên tập trạng thái một cách tượng trưng.
 - **Phương pháp Explicit (BFS & DFS)**: Duyệt và lưu trữ từng trạng thái cụ thể trong không gian trạng thái.
 
-Mục tiêu của thí nghiệm là đánh giá và so sánh thời gian thực thi, mức sử dụng bộ nhớ, cũng như khả năng mở rộng (scalability) của các phương pháp trên các Petri Net có kích thước khác nhau.
+Mục tiêu của TASK là đánh giá và so sánh thời gian thực thi, mức sử dụng bộ nhớ, cũng như khả năng mở rộng (scalability) của các phương pháp trên các Petri Net có kích thước khác nhau.
 
 ---
 
@@ -65,8 +65,8 @@ Mục tiêu của thí nghiệm là đánh giá và so sánh thời gian thực 
 |---------|-------|
 | Tốc độ BDD nhanh hơn BFS | **14.90x** |
 | Tốc độ BDD nhanh hơn DFS | **6.35x** |
-| Bộ nhớ BFS/BDD | 0.22x |
-| Bộ nhớ DFS/BDD | 0.22x |
+| Bộ nhớ BFS/BDD | 0.22x | (Không dùng để so sánh)
+| Bộ nhớ DFS/BDD | 0.22x | (Không dùng để so sánh)
 
 ---
 
@@ -107,7 +107,7 @@ Kết quả cho thấy BDD sử dụng **bộ nhớ nhiều hơn khoảng 4.5 l�
 - Overhead của unique table và computed cache.
 - Việc xây dựng transition relation monolithic.
 
-#### 4.2.2. Không hiệu quả cho Petri Net rất nhỏ
+#### 4.2.2. Không hiệu quả bằng Explicit cho Petri Net rất nhỏ
 
 Với các Petri Net có số lượng places và transitions nhỏ (input1, input2, input3), phương pháp explicit thực sự nhanh hơn BDD do:
 
@@ -117,10 +117,6 @@ Với các Petri Net có số lượng places và transitions nhỏ (input1, inp
 #### 4.2.3. Phụ thuộc vào variable ordering
 
 Hiệu suất của BDD phụ thuộc nhiều vào thứ tự các biến. Một variable ordering không tốt có thể dẫn đến kích thước BDD tăng theo hàm mũ, làm giảm hiệu quả của phương pháp.
-
-#### 4.2.4. Giới hạn với Petri Net không 1-safe
-
-Implementation hiện tại chỉ hỗ trợ **1-safe Petri Net** (mỗi place chứa tối đa 1 token). Việc mở rộng cho k-bounded Petri Net đòi hỏi encoding phức tạp hơn với nhiều biến BDD hơn cho mỗi place.
 
 ---
 
@@ -133,8 +129,6 @@ Qua kết quả thực nghiệm, nhóm rút ra các kết luận sau:
 1. **Phương pháp BDD vượt trội về thời gian** khi không gian trạng thái lớn (từ hàng trăm đến hàng nghìn trạng thái trở lên), với tốc độ nhanh hơn từ **6 đến 20 lần** so với DFS và từ **10 đến 50 lần** so với BFS.
 
 2. **Phương pháp Explicit phù hợp với Petri Net nhỏ** do chi phí khởi tạo thấp và implementation đơn giản.
-
-3. **Trade-off bộ nhớ - thời gian**: BDD tiêu tốn nhiều bộ nhớ hơn nhưng đổi lại thời gian thực thi nhanh hơn đáng kể.
 
 ### 5.2. Khuyến nghị sử dụng
 
@@ -170,14 +164,16 @@ Sau khi chạy, kết quả được lưu tại thư mục `Benchmark_output/`:
 
 ## 7. Lời cảm ơn
 
-Nhóm sinh viên xin gửi lời cảm ơn chân thành đến **Giảng viên hướng dẫn** đã tận tình chỉ dẫn và hỗ trợ trong quá trình thực hiện bài tập này.
+Nhóm chúng em xin gửi lời cảm ơn chân thành đến **Thầy Mai Xuân Toàn** đã tận tình chỉ dẫn và hỗ trợ trong quá trình thực hiện bài tập này.
 
-Cảm ơn quý Thầy/Cô đã dành thời gian đọc báo cáo Task 3 về phân tích và so sánh hiệu suất phương pháp BDD trong Reachability Analysis của Petri Net.
+Cảm ơn Thầy đã dành thời gian đọc báo cáo Task 3 về phân tích và so sánh hiệu suất phương pháp BDD trong Reachability Analysis của chúng em
 
-Mọi góp ý và nhận xét từ Thầy/Cô sẽ là nguồn động lực quý báu giúp nhóm hoàn thiện hơn trong các nhiệm vụ tiếp theo.
+Mọi góp ý và nhận xét từ Thầy sẽ là nguồn động lực quý báu giúp nhóm hoàn thiện hơn trong các nhiệm vụ tiếp theo.
 
 ---
 
 **Ngày hoàn thành**: 07/12/2025
+
+**Tác Giả** : Hoàng Nam & Thế Lộc 
 
 **Link GitHub**: [https://github.com/namhcmutpd/MM_BP_BenchMark_result](https://github.com/namhcmutpd/MM_BP_BenchMark_result)

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+  <net id="Philosophers-2-Reduced" type="http://www.pnml.org/version-2009/grammar/ptnet">
+    <page id="page0">
+      <name>
+        <text>Dining Philosophers (N=2) with Abort Mechanism</text>
+      </name>
+
+      <place id="Fork_1">
+        <name><text>Fork_1</text></name>
+        <initialMarking><text>1</text></initialMarking>
+      </place>
+      <place id="Fork_2">
+        <name><text>Fork_2</text></name>
+        <initialMarking><text>1</text></initialMarking>
+      </place>
+
+      <place id="Think_1">
+        <name><text>Think_1</text></name>
+        <initialMarking><text>1</text></initialMarking>
+      </place>
+      <place id="Wait_1">
+        <name><text>Wait_1</text></name>
+      </place>
+      <place id="Hold_1">
+        <name><text>Hold_1</text></name>
+      </place>
+      <place id="Eat_1">
+        <name><text>Eat_1</text></name>
+      </place>
+
+      <place id="Think_2">
+        <name><text>Think_2</text></name>
+        <initialMarking><text>1</text></initialMarking>
+      </place>
+      <place id="Wait_2">
+        <name><text>Wait_2</text></name>
+      </place>
+      <place id="Hold_2">
+        <name><text>Hold_2</text></name>
+      </place>
+      <place id="Eat_2">
+        <name><text>Eat_2</text></name>
+      </place>
+
+      <transition id="T_StartWait_1">
+        <name><text>Start_Wait_1</text></name>
+      </transition>
+      <transition id="T_GiveUp_1">
+        <name><text>Give_Up_1</text></name>
+      </transition>
+      <transition id="T_TakeL_1">
+        <name><text>Take_Fork1_1</text></name>
+      </transition>
+      <transition id="T_ReturnL_1">
+        <name><text>Return_Fork1_1</text></name>
+      </transition>
+      <transition id="T_TakeR_1">
+        <name><text>Take_Fork2_1</text></name>
+      </transition>
+      <transition id="T_Finish_1">
+        <name><text>Finish_1</text></name>
+      </transition>
+
+      <transition id="T_StartWait_2">
+        <name><text>Start_Wait_2</text></name>
+      </transition>
+      <transition id="T_GiveUp_2">
+        <name><text>Give_Up_2</text></name>
+      </transition>
+      <transition id="T_TakeL_2">
+        <name><text>Take_Fork2_2</text></name>
+      </transition>
+      <transition id="T_ReturnL_2">
+        <name><text>Return_Fork2_2</text></name>
+      </transition>
+      <transition id="T_TakeR_2">
+        <name><text>Take_Fork1_2</text></name>
+      </transition>
+      <transition id="T_Finish_2">
+        <name><text>Finish_2</text></name>
+      </transition>
+
+      <arc id="a1" source="Think_1" target="T_StartWait_1"/>
+      <arc id="a2" source="T_StartWait_1" target="Wait_1"/>
+      
+      <arc id="a3" source="Wait_1" target="T_GiveUp_1"/>
+      <arc id="a4" source="T_GiveUp_1" target="Think_1"/>
+      
+      <arc id="a5" source="Wait_1" target="T_TakeL_1"/>
+      <arc id="a6" source="Fork_1" target="T_TakeL_1"/>
+      <arc id="a7" source="T_TakeL_1" target="Hold_1"/>
+      
+      <arc id="a8" source="Hold_1" target="T_ReturnL_1"/>
+      <arc id="a9" source="T_ReturnL_1" target="Wait_1"/>
+      <arc id="a10" source="T_ReturnL_1" target="Fork_1"/>
+      
+      <arc id="a11" source="Hold_1" target="T_TakeR_1"/>
+      <arc id="a12" source="Fork_2" target="T_TakeR_1"/>
+      <arc id="a13" source="T_TakeR_1" target="Eat_1"/>
+      
+      <arc id="a14" source="Eat_1" target="T_Finish_1"/>
+      <arc id="a15" source="T_Finish_1" target="Think_1"/>
+      <arc id="a16" source="T_Finish_1" target="Fork_1"/>
+      <arc id="a17" source="T_Finish_1" target="Fork_2"/>
+
+      <arc id="a18" source="Think_2" target="T_StartWait_2"/>
+      <arc id="a19" source="T_StartWait_2" target="Wait_2"/>
+      
+      <arc id="a20" source="Wait_2" target="T_GiveUp_2"/>
+      <arc id="a21" source="T_GiveUp_2" target="Think_2"/>
+      
+      <arc id="a22" source="Wait_2" target="T_TakeL_2"/>
+      <arc id="a23" source="Fork_2" target="T_TakeL_2"/>
+      <arc id="a24" source="T_TakeL_2" target="Hold_2"/>
+      
+      <arc id="a25" source="Hold_2" target="T_ReturnL_2"/>
+      <arc id="a26" source="T_ReturnL_2" target="Wait_2"/>
+      <arc id="a27" source="T_ReturnL_2" target="Fork_2"/>
+      
+      <arc id="a28" source="Hold_2" target="T_TakeR_2"/>
+      <arc id="a29" source="Fork_1" target="T_TakeR_2"/>
+      <arc id="a30" source="T_TakeR_2" target="Eat_2"/>
+      
+      <arc id="a31" source="Eat_2" target="T_Finish_2"/>
+      <arc id="a32" source="T_Finish_2" target="Think_2"/>
+      <arc id="a33" source="T_Finish_2" target="Fork_2"/>
+      <arc id="a34" source="T_Finish_2" target="Fork_1"/>
+
+    </page>
+  </net>
+</pnml>

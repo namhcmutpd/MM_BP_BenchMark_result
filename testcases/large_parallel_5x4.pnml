@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='utf-8'?>
+<pnml>
+  <net type="http://www.pnml.org/version-2009/grammar/ptnet" id="parallel">
+    <place id="p0_s0">
+      <name>
+        <text>Process 0 Step 0</text>
+      </name>
+      <initialMarking>
+        <text>1</text>
+      </initialMarking>
+    </place>
+    <place id="p0_s1">
+      <name>
+        <text>Process 0 Step 1</text>
+      </name>
+    </place>
+    <place id="p0_s2">
+      <name>
+        <text>Process 0 Step 2</text>
+      </name>
+    </place>
+    <place id="p0_s3">
+      <name>
+        <text>Process 0 Step 3</text>
+      </name>
+    </place>
+    <transition id="t0_0">
+      <name>
+        <text>P0 0→1</text>
+      </name>
+    </transition>
+    <arc id="a0" source="p0_s0" target="t0_0" />
+    <arc id="a1" source="t0_0" target="p0_s1" />
+    <transition id="t0_1">
+      <name>
+        <text>P0 1→2</text>
+      </name>
+    </transition>
+    <arc id="a2" source="p0_s1" target="t0_1" />
+    <arc id="a3" source="t0_1" target="p0_s2" />
+    <transition id="t0_2">
+      <name>
+        <text>P0 2→3</text>
+      </name>
+    </transition>
+    <arc id="a4" source="p0_s2" target="t0_2" />
+    <arc id="a5" source="t0_2" target="p0_s3" />
+    <place id="p1_s0">
+      <name>
+        <text>Process 1 Step 0</text>
+      </name>
+      <initialMarking>
+        <text>1</text>
+      </initialMarking>
+    </place>
+    <place id="p1_s1">
+      <name>
+        <text>Process 1 Step 1</text>
+      </name>
+    </place>
+    <place id="p1_s2">
+      <name>
+        <text>Process 1 Step 2</text>
+      </name>
+    </place>
+    <place id="p1_s3">
+      <name>
+        <text>Process 1 Step 3</text>
+      </name>
+    </place>
+    <transition id="t1_0">
+      <name>
+        <text>P1 0→1</text>
+      </name>
+    </transition>
+    <arc id="a6" source="p1_s0" target="t1_0" />
+    <arc id="a7" source="t1_0" target="p1_s1" />
+    <transition id="t1_1">
+      <name>
+        <text>P1 1→2</text>
+      </name>
+    </transition>
+    <arc id="a8" source="p1_s1" target="t1_1" />
+    <arc id="a9" source="t1_1" target="p1_s2" />
+    <transition id="t1_2">
+      <name>
+        <text>P1 2→3</text>
+      </name>
+    </transition>
+    <arc id="a10" source="p1_s2" target="t1_2" />
+    <arc id="a11" source="t1_2" target="p1_s3" />
+    <place id="p2_s0">
+      <name>
+        <text>Process 2 Step 0</text>
+      </name>
+      <initialMarking>
+        <text>1</text>
+      </initialMarking>
+    </place>
+    <place id="p2_s1">
+      <name>
+        <text>Process 2 Step 1</text>
+      </name>
+    </place>
+    <place id="p2_s2">
+      <name>
+        <text>Process 2 Step 2</text>
+      </name>
+    </place>
+    <place id="p2_s3">
+      <name>
+        <text>Process 2 Step 3</text>
+      </name>
+    </place>
+    <transition id="t2_0">
+      <name>
+        <text>P2 0→1</text>
+      </name>
+    </transition>
+    <arc id="a12" source="p2_s0" target="t2_0" />
+    <arc id="a13" source="t2_0" target="p2_s1" />
+    <transition id="t2_1">
+      <name>
+        <text>P2 1→2</text>
+      </name>
+    </transition>
+    <arc id="a14" source="p2_s1" target="t2_1" />
+    <arc id="a15" source="t2_1" target="p2_s2" />
+    <transition id="t2_2">
+      <name>
+        <text>P2 2→3</text>
+      </name>
+    </transition>
+    <arc id="a16" source="p2_s2" target="t2_2" />
+    <arc id="a17" source="t2_2" target="p2_s3" />
+    <place id="p3_s0">
+      <name>
+        <text>Process 3 Step 0</text>
+      </name>
+      <initialMarking>
+        <text>1</text>
+      </initialMarking>
+    </place>
+    <place id="p3_s1">
+      <name>
+        <text>Process 3 Step 1</text>
+      </name>
+    </place>
+    <place id="p3_s2">
+      <name>
+        <text>Process 3 Step 2</text>
+      </name>
+    </place>
+    <place id="p3_s3">
+      <name>
+        <text>Process 3 Step 3</text>
+      </name>
+    </place>
+    <transition id="t3_0">
+      <name>
+        <text>P3 0→1</text>
+      </name>
+    </transition>
+    <arc id="a18" source="p3_s0" target="t3_0" />
+    <arc id="a19" source="t3_0" target="p3_s1" />
+    <transition id="t3_1">
+      <name>
+        <text>P3 1→2</text>
+      </name>
+    </transition>
+    <arc id="a20" source="p3_s1" target="t3_1" />
+    <arc id="a21" source="t3_1" target="p3_s2" />
+    <transition id="t3_2">
+      <name>
+        <text>P3 2→3</text>
+      </name>
+    </transition>
+    <arc id="a22" source="p3_s2" target="t3_2" />
+    <arc id="a23" source="t3_2" target="p3_s3" />
+    <place id="p4_s0">
+      <name>
+        <text>Process 4 Step 0</text>
+      </name>
+      <initialMarking>
+        <text>1</text>
+      </initialMarking>
+    </place>
+    <place id="p4_s1">
+      <name>
+        <text>Process 4 Step 1</text>
+      </name>
+    </place>
+    <place id="p4_s2">
+      <name>
+        <text>Process 4 Step 2</text>
+      </name>
+    </place>
+    <place id="p4_s3">
+      <name>
+        <text>Process 4 Step 3</text>
+      </name>
+    </place>
+    <transition id="t4_0">
+      <name>
+        <text>P4 0→1</text>
+      </name>
+    </transition>
+    <arc id="a24" source="p4_s0" target="t4_0" />
+    <arc id="a25" source="t4_0" target="p4_s1" />
+    <transition id="t4_1">
+      <name>
+        <text>P4 1→2</text>
+      </name>
+    </transition>
+    <arc id="a26" source="p4_s1" target="t4_1" />
+    <arc id="a27" source="t4_1" target="p4_s2" />
+    <transition id="t4_2">
+      <name>
+        <text>P4 2→3</text>
+      </name>
+    </transition>
+    <arc id="a28" source="p4_s2" target="t4_2" />
+    <arc id="a29" source="t4_2" target="p4_s3" />
+  </net>
+</pnml>

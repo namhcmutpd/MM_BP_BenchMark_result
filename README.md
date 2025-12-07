@@ -1,199 +1,183 @@
-# 🔬 TASK 3: Symbolic Reachability Analysis using BDD
+# BÁO CÁO TASK 3: SO SÁNH HIỆU SUẤT PHƯƠNG PHÁP BDD VÀ EXPLICIT TRONG PHÂN TÍCH KHẢ NĂNG ĐẠT ĐƯỢC (REACHABILITY ANALYSIS) CỦA PETRI NET
 
-**Symbolic computation of reachable markings by using BDD (Binary Decision Diagrams)**
+## 1. Giới thiệu
 
-> Encode markings symbolically using Binary Decision Diagrams (BDDs). Construct the reachability set iteratively by symbolic image computation. Return a BDD representing the set of all reachable markings. Report the total number of reachable markings and compare performance with the explicit approach (time and memory).
+Báo cáo này trình bày kết quả so sánh hiệu suất giữa hai phương pháp phân tích khả năng đạt được (Reachability Analysis) trên mô hình Petri Net:
 
----
+- **Phương pháp Symbolic (BDD - Binary Decision Diagram)**: Sử dụng cấu trúc dữ liệu BDD để biểu diễn và thao tác trên tập trạng thái một cách tượng trưng.
+- **Phương pháp Explicit (BFS & DFS)**: Duyệt và lưu trữ từng trạng thái cụ thể trong không gian trạng thái.
 
-## 📊 Benchmark Results Summary
-
-| Test Case | States | BDD (ms) | BFS (ms) | DFS (ms) | Winner | Speedup |
-|-----------|--------|----------|----------|----------|--------|---------|
-| example.pnml | **1,048,559** | 8,664 | 852,830 | 433,816 | 🏆 **BDD** | **98x vs BFS** |
-| parallel.pnml | 4,096 | 48 | 2,245 | 819 | 🏆 **BDD** | **46x vs BFS** |
-| mixed_stress.pnml | 1,536 | 116 | 1,120 | 441 | 🏆 **BDD** | **9.6x vs BFS** |
-| source_sink.pnml | 256 | 57 | 150 | 64 | 🏆 **BDD** | **2.6x vs BFS** |
-| large_parallel_5x4.pnml | 1,024 | 139 | 344 | 180 | 🏆 **BDD** | **2.5x vs BFS** |
-| large_parallel_4x5.pnml | 625 | 142 | 217 | 108 | DFS | 1.5x vs BFS |
-| input.pnml | 13 | 29 | 3.8 | 1.7 | DFS | - |
-| input2.pnml | 5 | 7.6 | 0.7 | 0.3 | DFS | - |
-| ring.pnml | 8 | 11 | 1.3 | 0.7 | DFS | - |
-
-### 📈 Key Findings
-
-- **BDD excels with large state spaces**: Up to **98x faster** than BFS for 1M+ states
-- **Memory efficient**: BDD uses ~48MB for 1M states vs ~232MB for explicit methods  
-- **Explicit methods win for small nets**: DFS is fastest for < 100 states
-- **Crossover point**: BDD becomes advantageous around **500-1000 states**
+Mục tiêu của thí nghiệm là đánh giá và so sánh thời gian thực thi, mức sử dụng bộ nhớ, cũng như khả năng mở rộng (scalability) của các phương pháp trên các Petri Net có kích thước khác nhau.
 
 ---
 
-## 🛠️ Installation
+## 2. Phương pháp thực nghiệm
 
-### 1. Create virtual environment
+### 2.1. Môi trường thực nghiệm
+
+- **Ngôn ngữ lập trình**: Python 3.14
+- **Thư viện BDD**: `dd` (autoref)
+- **Số lượng test case**: 12 file Petri Net (định dạng PNML)
+- **Các chỉ số đo lường**: 
+  - Số lượng trạng thái đạt được
+  - Thời gian thực thi (ms)
+  - Bộ nhớ sử dụng (MB)
+
+### 2.2. Thuật toán được so sánh
+
+| Thuật toán | Mô tả |
+|------------|-------|
+| **BDD Symbolic** | Sử dụng Binary Decision Diagram với frontier optimization |
+| **BFS Explicit** | Breadth-First Search - duyệt theo chiều rộng |
+| **DFS Explicit** | Depth-First Search - duyệt theo chiều sâu |
+
+---
+
+## 3. Kết quả thực nghiệm
+
+### 3.1. Bảng kết quả chi tiết
+
+| File | Places | Trans | BDD States | BDD Time(ms) | BDD Mem(MB) | BFS States | BFS Time(ms) | BFS Mem(MB) | DFS States | DFS Time(ms) | DFS Mem(MB) |
+|------|--------|-------|------------|--------------|-------------|------------|--------------|-------------|------------|--------------|-------------|
+| input1.pnml | 4 | 2 | 3 | 5.65 | 0.054 | 3 | 0.42 | 0.003 | 3 | 0.24 | 0.003 |
+| input2.pnml | 5 | 4 | 3 | 3.06 | 0.073 | 3 | 0.46 | 0.003 | 3 | 0.26 | 0.003 |
+| input3.pnml | 4 | 2 | 2 | 1.44 | 0.037 | 2 | 0.32 | 0.003 | 2 | 0.16 | 0.002 |
+| input4.pnml | 23 | 23 | 3072 | 125.25 | 3.163 | 3072 | 2422.79 | 0.814 | 3072 | 994.89 | 0.825 |
+| input5.pnml | 8 | 6 | 6 | 8.54 | 0.246 | 6 | 1.03 | 0.004 | 6 | 0.48 | 0.004 |
+| input6.pnml | 8 | 12 | 36 | 27.40 | 0.747 | 36 | 9.25 | 0.010 | 36 | 4.61 | 0.008 |
+| input7.pnml | 15 | 20 | 1536 | 84.46 | 2.118 | 1536 | 945.72 | 0.377 | 1536 | 447.72 | 0.374 |
+| input8.pnml | 12 | 12 | 4096 | 41.47 | 0.848 | 4096 | 1996.38 | 0.699 | 4096 | 839.63 | 0.690 |
+| input9.pnml | 8 | 10 | 20 | 17.45 | 0.376 | 20 | 7.26 | 0.007 | 20 | 3.46 | 0.007 |
+| input10.pnml | 8 | 8 | 8 | 10.92 | 0.264 | 8 | 1.11 | 0.005 | 8 | 0.67 | 0.004 |
+| input11.pnml | 10 | 6 | 16 | 10.66 | 0.332 | 16 | 4.71 | 0.006 | 16 | 1.69 | 0.005 |
+| input12.pnml | 12 | 16 | 256 | 35.08 | 0.805 | 256 | 143.27 | 0.047 | 256 | 63.35 | 0.046 |
+
+### 3.2. Tổng hợp thống kê
+
+| Chỉ số | BDD | BFS | DFS |
+|--------|-----|-----|-----|
+| **Tổng thời gian (ms)** | 371.38 | 5532.72 | 2357.16 |
+| **Tổng bộ nhớ (MB)** | 9.06 | 1.98 | 1.97 |
+
+### 3.3. Tỉ lệ so sánh hiệu suất
+
+| So sánh | Tỉ lệ |
+|---------|-------|
+| Tốc độ BDD nhanh hơn BFS | **14.90x** |
+| Tốc độ BDD nhanh hơn DFS | **6.35x** |
+| Bộ nhớ BFS/BDD | 0.22x |
+| Bộ nhớ DFS/BDD | 0.22x |
+
+---
+
+## 4. Phân tích và đánh giá
+
+### 4.1. Ưu điểm của phương pháp BDD
+
+#### 4.1.1. Hiệu suất thời gian vượt trội trên Petri Net lớn
+
+Kết quả thực nghiệm cho thấy phương pháp BDD thể hiện **ưu thế rõ rệt về thời gian thực thi** khi kích thước không gian trạng thái tăng lên:
+
+- Với **input4.pnml** (23 places, 23 transitions, 3072 states): BDD hoàn thành trong **125.25ms**, trong khi BFS cần **2422.79ms** (chậm hơn ~19.3 lần) và DFS cần **994.89ms** (chậm hơn ~7.9 lần).
+- Với **input8.pnml** (12 places, 12 transitions, 4096 states): BDD hoàn thành trong **41.47ms**, trong khi BFS cần **1996.38ms** (chậm hơn ~48.1 lần) và DFS cần **839.63ms** (chậm hơn ~20.2 lần).
+- Với **input7.pnml** (15 places, 20 transitions, 1536 states): BDD hoàn thành trong **84.46ms**, trong khi BFS cần **945.72ms** (chậm hơn ~11.2 lần).
+
+#### 4.1.2. Khả năng mở rộng (Scalability)
+
+Phương pháp BDD cho thấy khả năng mở rộng tốt hơn nhiều so với phương pháp explicit:
+
+- **Độ phức tạp không gian**: BDD biểu diễn tập trạng thái một cách nén gọn thông qua cấu trúc đồ thị quyết định nhị phân, thay vì lưu từng trạng thái riêng lẻ.
+- **Độ phức tạp thời gian**: Các phép toán trên BDD (giao, hợp, lượng tử hóa) được thực hiện hiệu quả nhờ cơ chế memoization và unique table.
+
+#### 4.1.3. Tính tối ưu trong frontier exploration
+
+Implementation BDD sử dụng **frontier optimization**, chỉ tính toán trạng thái mới từ frontier (tập trạng thái vừa khám phá), thay vì tính lại từ toàn bộ tập đã đạt được. Điều này giúp giảm đáng kể số phép toán cần thực hiện.
+
+#### 4.1.4. Interleaved variable ordering
+
+Việc sắp xếp biến theo kiểu interleaved (x0, x0', x1, x1', ...) giúp tối ưu hóa hiệu suất của các phép toán BDD, đặc biệt là phép quantification và rename.
+
+### 4.2. Hạn chế của phương pháp BDD
+
+#### 4.2.1. Tiêu tốn bộ nhớ cao hơn cho Petri Net nhỏ
+
+Kết quả cho thấy BDD sử dụng **bộ nhớ nhiều hơn khoảng 4.5 lần** so với phương pháp explicit (9.06 MB so với ~2 MB). Điều này là do:
+
+- Chi phí khởi tạo BDD manager và các cấu trúc dữ liệu hỗ trợ.
+- Overhead của unique table và computed cache.
+- Việc xây dựng transition relation monolithic.
+
+#### 4.2.2. Không hiệu quả cho Petri Net rất nhỏ
+
+Với các Petri Net có số lượng places và transitions nhỏ (input1, input2, input3), phương pháp explicit thực sự nhanh hơn BDD do:
+
+- Chi phí khởi tạo BDD lớn hơn lợi ích thu được.
+- Không gian trạng thái nhỏ không phát huy được ưu thế nén của BDD.
+
+#### 4.2.3. Phụ thuộc vào variable ordering
+
+Hiệu suất của BDD phụ thuộc nhiều vào thứ tự các biến. Một variable ordering không tốt có thể dẫn đến kích thước BDD tăng theo hàm mũ, làm giảm hiệu quả của phương pháp.
+
+#### 4.2.4. Giới hạn với Petri Net không 1-safe
+
+Implementation hiện tại chỉ hỗ trợ **1-safe Petri Net** (mỗi place chứa tối đa 1 token). Việc mở rộng cho k-bounded Petri Net đòi hỏi encoding phức tạp hơn với nhiều biến BDD hơn cho mỗi place.
+
+---
+
+## 5. Kết luận
+
+### 5.1. Tổng kết
+
+Qua kết quả thực nghiệm, nhóm rút ra các kết luận sau:
+
+1. **Phương pháp BDD vượt trội về thời gian** khi không gian trạng thái lớn (từ hàng trăm đến hàng nghìn trạng thái trở lên), với tốc độ nhanh hơn từ **6 đến 20 lần** so với DFS và từ **10 đến 50 lần** so với BFS.
+
+2. **Phương pháp Explicit phù hợp với Petri Net nhỏ** do chi phí khởi tạo thấp và implementation đơn giản.
+
+3. **Trade-off bộ nhớ - thời gian**: BDD tiêu tốn nhiều bộ nhớ hơn nhưng đổi lại thời gian thực thi nhanh hơn đáng kể.
+
+### 5.2. Khuyến nghị sử dụng
+
+| Kích thước Petri Net | Phương pháp khuyến nghị |
+|----------------------|-------------------------|
+| Nhỏ (< 10 places, < 100 states) | DFS hoặc BFS |
+| Trung bình (10-20 places, 100-1000 states) | BDD |
+| Lớn (> 20 places, > 1000 states) | **BDD (bắt buộc)** |
+
+---
+
+## 6. Hướng dẫn chạy chương trình
+
+### 6.1. Cài đặt dependencies
+
 ```bash
-# Windows
-python -m venv venv
-venv\Scripts\Activate.ps1
-
-# Linux / macOS
-python3 -m venv venv
-source venv/bin/activate
+pip install numpy dd
 ```
 
-### 2. Install dependencies
+### 6.2. Chạy benchmark
+
 ```bash
-pip install -r requirements.txt
+python run_all_test.py
 ```
+
+### 6.3. Kết quả output
+
+Sau khi chạy, kết quả được lưu tại thư mục `Benchmark_output/`:
+- `result.csv`: Kết quả dạng CSV để phân tích
+- `result.txt`: Báo cáo dạng text với bảng định dạng
 
 ---
 
-## 🚀 Usage
+## 7. Lời cảm ơn
 
-### Run Full Benchmark
-```bash
-python run_full_benchmark.py
-```
-This generates:
-- `benchmark_results.txt` - Detailed report with statistics
-- `benchmark_results.csv` - Data for analysis/visualization
+Nhóm sinh viên xin gửi lời cảm ơn chân thành đến **Giảng viên hướng dẫn** đã tận tình chỉ dẫn và hỗ trợ trong quá trình thực hiện bài tập này.
 
-### Run Unit Tests
-```bash
-# Run all tests
-python -m pytest -vv test_BDD.py
+Cảm ơn quý Thầy/Cô đã dành thời gian đọc báo cáo Task 3 về phân tích và so sánh hiệu suất phương pháp BDD trong Reachability Analysis của Petri Net.
 
-# Run specific test
-python -m pytest -vv test_BDD.py::test_001
-```
-
-### Quick Test
-```bash
-python quick_test.py
-```
-
-### Test Single File
-```python
-from src.PetriNet import PetriNet
-from src.BDD import bdd_reachable
-
-pn = PetriNet.from_pnml("testcases/parallel.pnml")
-bdd_result, count = bdd_reachable(pn)
-print(f"Reachable states: {count}")
-```
+Mọi góp ý và nhận xét từ Thầy/Cô sẽ là nguồn động lực quý báu giúp nhóm hoàn thiện hơn trong các nhiệm vụ tiếp theo.
 
 ---
 
-## 📁 Project Structure
+**Ngày hoàn thành**: 07/12/2025
 
-```
-TASK3_BTL_HK251-main/
-├── src/
-│   ├── BDD.py          # 🔑 Optimized BDD implementation
-│   ├── BFS.py          # Explicit BFS algorithm
-│   ├── DFS.py          # Explicit DFS algorithm
-│   └── PetriNet.py     # PNML parser
-├── testcases/          # 📂 All PNML test files
-│   ├── example.pnml    # Large test (1M+ states)
-│   ├── parallel.pnml   # Parallel structure
-│   ├── ring.pnml       # Ring topology
-│   └── ...             # 17 test files total
-├── benchmark_results.txt   # 📊 Detailed results
-├── benchmark_results.csv   # 📊 CSV for analysis
-├── run_full_benchmark.py   # Benchmark script
-├── test_BDD.py            # Unit tests
-└── requirements.txt       # Dependencies
-```
-
----
-
-## ⚡ BDD Optimizations Applied
-
-| Optimization | Description | Impact |
-|--------------|-------------|--------|
-| **Frame Condition Cache** | Pre-compute equivalence BDDs once | Reduces redundant computation |
-| **Monolithic Transition Relation** | Combine all transitions into single BDD | Better node sharing |
-| **Interleaved Variable Ordering** | `x0, x0', x1, x1'...` ordering | Compact BDD representation |
-| **NumPy Vectorization** | Use `np.flatnonzero()` | Faster index computation |
-| **Memory Efficient Types** | Use `np.int8` instead of `np.int64` | 8x memory reduction |
-| **Early Termination** | Skip impossible transitions | Avoid unnecessary computation |
-
----
-
-## 📝 Algorithm Overview
-
-```
-Input: Petri Net (Places, Transitions, I/O matrices, Initial Marking)
-Output: BDD representing all reachable markings, Count of reachable states
-
-1. Initialize BDD Manager with interleaved variable ordering
-2. Encode initial marking M0 as BDD
-3. Build transition relation T(x, x') for all transitions:
-   - Enable condition: input places have tokens
-   - Update condition: consume/produce tokens  
-   - Frame condition: unchanged places keep their value
-4. Iterative reachability (frontier-based):
-   WHILE new states found:
-     - Compute image: Next = ∃x. (Frontier(x) ∧ T(x, x'))
-     - Rename x' → x
-     - Add new states to Reachable set
-     - Update Frontier = newly discovered states
-5. Count satisfying assignments of final BDD
-```
-
----
-
-## 📊 Detailed Benchmark Results
-
-See [benchmark_results.txt](benchmark_results.txt) for complete statistics including:
-- Execution time comparison (all 17 test files)
-- Memory usage analysis  
-- Speedup calculations
-- Consistency verification
-
-See [benchmark_results.csv](benchmark_results.csv) for raw data.
-
----
-
-## 📋 Requirements
-
-- Python 3.8+
-- `dd` - Decision Diagram library
-- `numpy` - Numerical operations
-- `pytest` - Testing framework
-
----
-
-<p align="center">
-  <b>BDD-based Symbolic Model Checking for Petri Net Reachability</b><br>
-  <i>Optimized implementation achieving up to 98x speedup over explicit methods</i>
-</p>
-
----
-
-<p align="center">
-  <a href="https://github.com/namhcmutpd/MM_BP_BenchMark_result">
-    <img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
-  </a>
-</p>
-
----
-
-<p align="center">
-  <a href="https://www.facebook.com/Shiba.Vo.Tien">
-    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook"/>
-  </a>
-  <a href="https://www.tiktok.com/@votien_shiba">
-    <img src="https://img.shields.io/badge/TikTok-000000?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok"/>
-  </a>
-  <a href="https://www.facebook.com/groups/khmt.ktmt.cse.bku?locale=vi_VN">
-    <img src="https://img.shields.io/badge/Facebook%20Group-4267B2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook Group"/>
-  </a>
-  <a href="https://www.facebook.com/CODE.MT.BK">
-    <img src="https://img.shields.io/badge/Page%20CODE.MT.BK-0057FF?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook Page"/>
-  </a>
-  <a href="https://github.com/VoTienBKU">
-    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
-  </a>
-</p>
+**Link GitHub**: [https://github.com/namhcmutpd/MM_BP_BenchMark_result](https://github.com/namhcmutpd/MM_BP_BenchMark_result)

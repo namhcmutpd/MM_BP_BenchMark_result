@@ -1,0 +1,87 @@
+@startuml UC_XuLiCanhBaoRuiRo
+title Activity Diagram – UC: Xử lí và cảnh báo rủi ro
+
+|Hệ thống (Bộ xử lí nền)|
+start
+note right
+  Luồng này chạy liên tục ở nền,
+  được kích hoạt mỗi khi nhận được
+  dữ liệu mới từ thiết bị hoặc
+  người dùng nhập thủ công.
+end note
+
+:Nhận dữ liệu sinh trắc học mới\n(nhịp tim, huyết áp, SpO2,\nđường huyết, nhiệt độ...);
+
+:Xác định loại dữ liệu\nvà profile người dùng\n(tuổi, giới tính, bệnh nền);
+
+:Truy xuất bộ quy tắc\ncảnh báo (rule engine)\ncho người dùng này;
+
+fork
+  :─── Phân tích ngưỡng tức thời ───;
+  :So sánh giá trị mới\nvới ngưỡng bình thường\n(dựa theo WHO + profile người dùng);
+
+  if (Vượt ngưỡng nguy hiểm cấp cao?) then (Có)
+    :Phân loại: RỦI RO CAO\n(Critical);
+  else if (Vượt ngưỡng cảnh báo?) then (Có)
+    :Phân loại: CẢNH BÁO\n(Warning);
+  else
+    :Phân loại: BÌNH THƯỜNG\n(Normal);
+  endif
+
+fork again
+  :─── Phân tích xu hướng ───;
+  :Truy xuất lịch sử 24 giờ\nqua của chỉ số này;
+  :Chạy thuật toán phát hiện\nxu hướng bất thường\n(tăng/giảm liên tục, bất ổn định);
+
+  if (Phát hiện xu hướng bất thường?) then (Có)
+    :Đánh dấu cờ: TREND_ALERT;
+  else (Không)
+    :Bỏ qua xu hướng;
+  endif
+end fork
+
+:Tổng hợp kết quả\nphân tích ngưỡng + xu hướng;
+
+if (Phân loại = Critical?) then (Có)
+  :Tạo bản ghi cảnh báo khẩn cấp\ntrong CSDL;
+  :Gửi push notification ngay lập tức\n(độ ưu tiên cao, vượt qua chế độ im lặng);
+
+  |Người dùng|
+  :Nhận cảnh báo khẩn cấp\nvới hướng dẫn sơ cứu;
+  if (Không phản hồi trong 2 phút?) then (Có)
+    |Hệ thống (Bộ xử lí nền)|
+    :Gửi SMS / cuộc gọi\nđến liên hệ khẩn cấp;
+    :Gửi thông báo đến\nbác sĩ phụ trách (nếu có);
+  else (Đã phản hồi)
+    |Hệ thống (Bộ xử lí nền)|
+    :Ghi nhận người dùng\nđã xác nhận cảnh báo;
+  endif
+
+else if (Phân loại = Warning hoặc TREND_ALERT?) then (Có)
+  :Tạo bản ghi cảnh báo thường\ntrong CSDL;
+  :Gửi push notification thông thường\nvà hiển thị biểu tượng cảnh báo\ntrên Dashboard;
+
+  |Người dùng|
+  :Xem thông báo cảnh báo\nvà lời khuyên y tế cơ bản;
+  :Nhấn "Đã hiểu" để xác nhận;
+
+  |Hệ thống (Bộ xử lí nền)|
+  :Đánh dấu cảnh báo đã được đọc;
+
+else (Bình thường)
+  :Không tạo cảnh báo;
+  :Cập nhật Dashboard\nvới chỉ số màu xanh ✓;
+endif
+
+:Lưu toàn bộ kết quả phân tích\nvào log sự kiện\n(audit trail);
+
+:Kiểm tra xem có cần\nđề xuất gặp bác sĩ không\n(dựa trên tần suất cảnh báo\ntrong 7 ngày qua);
+
+if (Cần đề xuất gặp bác sĩ?) then (Có)
+  |Người dùng|
+  :Nhận gợi ý đặt lịch\nhẹn gặp bác sĩ;
+else (Không)
+endif
+
+stop
+@enduml

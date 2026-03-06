@@ -1,0 +1,81 @@
+@startuml UC_LiveTracking
+title Activity Diagram – UC: Live Tracking (Theo dõi thời gian thực)
+
+|Người dùng|
+start
+:Mở ứng dụng và đăng nhập;
+:Chọn mục "Live Tracking";
+
+|Hệ thống|
+:Kiểm tra kết nối thiết bị đeo;
+if (Thiết bị đang kết nối?) then (Không)
+  :Hiển thị cảnh báo\n"Không tìm thấy thiết bị.\nVui lòng kiểm tra kết nối";
+  |Người dùng|
+  :Kiểm tra thiết bị\nvà thử lại;
+  |Hệ thống|
+else (Có)
+endif
+
+:Khởi tạo phiên Live Tracking;
+
+|Thiết bị đeo|
+:Bắt đầu thu thập dữ liệu\nliên tục theo chu kỳ\n(mỗi 1–5 giây tuỳ loại cảm biến);
+
+|Hệ thống|
+repeat
+  :Nhận gói dữ liệu\ntừ thiết bị qua BLE/WiFi;
+  :Giải mã và xác thực\ngói dữ liệu;
+
+  fork
+    :Cập nhật chỉ số nhịp tim\ntrên màn hình thời gian thực;
+  fork again
+    :Cập nhật SpO2 (độ bão hoà oxy);
+  fork again
+    :Cập nhật nhịp thở;
+  fork again
+    :Cập nhật vị trí GPS\nvà quãng đường;
+  fork again
+    :Cập nhật biểu đồ\nthời gian thực (rolling chart);
+  end fork
+
+  :Lưu snapshot dữ liệu\nvào bộ nhớ tạm (buffer);
+  :Kiểm tra ngưỡng bất thường\n(nhịp tim / SpO2 vượt ngưỡng);
+
+  if (Phát hiện bất thường?) then (Có)
+    :Kích hoạt cảnh báo\n(đèn đỏ + âm thanh + rung);
+    :Hiển thị popup cảnh báo\nvà lời khuyên;
+    |Người dùng|
+    :Xem cảnh báo;
+    if (Xác nhận đã xem?) then (Có)
+      |Hệ thống|
+      :Ghi nhận cảnh báo\nđã được xác nhận;
+    else (Không phản hồi trong 30s)
+      |Hệ thống|
+      :Gửi thông báo khẩn\nđến liên hệ khẩn cấp (nếu cài);
+    endif
+  else (Không)
+  endif
+
+repeat while (Người dùng nhấn "Dừng"?) is (Không)
+-> Có;
+
+|Người dùng|
+:Nhấn "Kết thúc phiên Live Tracking";
+
+|Hệ thống|
+:Dừng nhận dữ liệu từ thiết bị;
+:Tổng hợp toàn bộ dữ liệu\ntrong phiên:
+- Thời lượng
+- Nhịp tim TB / Max / Min
+- SpO2 TB
+- Tổng quãng đường
+- Calories ước tính;
+:Lưu kết quả phiên vào CSDL;
+:Đẩy dữ liệu phiên lên máy chủ\n(đồng bộ đám mây);
+:Hiển thị màn hình\nTổng kết phiên Live Tracking;
+
+|Người dùng|
+:Xem kết quả và (tuỳ chọn)\nthêm ghi chú / chia sẻ;
+
+stop
+@enduml

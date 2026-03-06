@@ -1,0 +1,50 @@
+@startuml UC12_ChiaSeDuLieuVoiBacSi
+title Activity Diagram - UC12: Chia sẻ dữ liệu sức khỏe với bác sĩ
+
+|Người dùng|
+start
+:Đăng nhập thành công;
+:Chọn mục "Chia sẻ dữ liệu";
+
+|Hệ thống|
+:Hiển thị các phương thức chia sẻ\nvà danh sách bác sĩ đã kết nối;
+
+|Người dùng|
+:Chọn phương thức chia sẻ\n(Liên kết bác sĩ trực tiếp /\nTạo báo cáo PDF / Gửi qua email);
+
+fork
+  :--- Luồng: Liên kết bác sĩ trực tiếp ---;
+  :Nhập mã bác sĩ hoặc\ntìm kiếm theo tên / email;
+  |Hệ thống|
+  :Tìm kiếm bác sĩ trong hệ thống;
+  if (Tìm thấy bác sĩ?) then (Không)
+    :Hiển thị thông báo\n"Không tìm thấy bác sĩ";
+    |Người dùng|
+    :Tìm kiếm lại;
+    |Hệ thống|
+  else (Có)
+    :Hiển thị thông tin bác sĩ\nđể xác nhận;
+    |Người dùng|
+    :Xác nhận kết nối và\nchọn dữ liệu muốn chia sẻ\n(chỉ số nào / khoảng thời gian);
+    |Hệ thống|
+    :Gửi yêu cầu kết nối đến bác sĩ;
+    :Bác sĩ nhận và chấp nhận yêu cầu;
+    :Cấp quyền truy cập dữ liệu\ncho tài khoản bác sĩ;
+    :Thông báo cho người dùng\n"Kết nối thành công";
+  endif
+fork again
+  :--- Luồng: Tạo báo cáo PDF ---;
+  |Người dùng|
+  :Chọn loại dữ liệu và khoảng thời gian;
+  |Hệ thống|
+  :Tổng hợp dữ liệu và\ntạo file báo cáo PDF;
+  :Cho phép tải về hoặc\ngửi qua email;
+  |Người dùng|
+  :Nhấn "Tải về" hoặc\nnhập email bác sĩ để gửi;
+  |Hệ thống|
+  :Thực hiện hành động\n(tải về / gửi email);
+  :Hiển thị xác nhận thành công;
+end fork
+
+stop
+@enduml

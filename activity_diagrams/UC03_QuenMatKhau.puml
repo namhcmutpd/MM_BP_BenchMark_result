@@ -1,0 +1,55 @@
+@startuml UC03_QuenMatKhau
+title Activity Diagram - UC03: Quên mật khẩu
+
+|Người dùng|
+start
+:Nhấn "Quên mật khẩu?" trên màn hình đăng nhập;
+:Nhập địa chỉ email đã đăng ký;
+:Nhấn "Gửi yêu cầu đặt lại";
+
+|Hệ thống|
+:Kiểm tra email tồn tại trong CSDL;
+if (Email tồn tại?) then (Không)
+  :Hiển thị thông báo\n"Email không tồn tại trong hệ thống";
+  |Người dùng|
+  :Kiểm tra lại email;
+  |Hệ thống|
+else (Có)
+endif
+
+:Tạo mã token đặt lại mật khẩu\n(thời hạn 30 phút);
+:Gửi email chứa liên kết đặt lại mật khẩu;
+:Hiển thị thông báo\n"Email đã được gửi. Vui lòng kiểm tra hộp thư";
+
+|Người dùng|
+:Mở email, nhấn liên kết đặt lại mật khẩu;
+
+|Hệ thống|
+:Xác minh token;
+if (Token hợp lệ và chưa hết hạn?) then (Không)
+  :Hiển thị thông báo\n"Liên kết đã hết hạn";
+  :Cho phép gửi lại yêu cầu;
+  |Người dùng|
+  :Yêu cầu gửi lại email;
+  |Hệ thống|
+else (Có)
+  :Hiển thị form nhập mật khẩu mới;
+  |Người dùng|
+  :Nhập mật khẩu mới và xác nhận mật khẩu mới;
+  |Hệ thống|
+  :Kiểm tra mật khẩu mới;
+  if (Mật khẩu mới hợp lệ\n(≥8 ký tự, đủ yêu cầu bảo mật)?) then (Không)
+    :Hiển thị yêu cầu mật khẩu;
+    |Người dùng|
+    :Sửa lại mật khẩu;
+    |Hệ thống|
+  else (Có)
+  endif
+  :Cập nhật mật khẩu mới vào CSDL;
+  :Vô hiệu hoá tất cả token cũ;
+  :Chuyển hướng về màn hình đăng nhập;
+  :Hiển thị thông báo\n"Đặt lại mật khẩu thành công!";
+endif
+
+stop
+@enduml

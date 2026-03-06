@@ -1,0 +1,49 @@
+@startuml UC09_XemBaoCaoThongKe
+title Activity Diagram - UC09: Xem báo cáo thống kê
+
+|Người dùng|
+start
+:Đăng nhập thành công;
+:Chọn mục "Báo cáo & Thống kê";
+
+|Hệ thống|
+:Hiển thị màn hình báo cáo\nvới các tuỳ chọn loại báo cáo;
+
+|Người dùng|
+:Chọn loại báo cáo\n(Tổng quan / Hoạt động thể chất\n/ Chỉ số sức khỏe / Dinh dưỡng\n/ So sánh theo thời gian);
+:Chọn khoảng thời gian\n(tuần / tháng / quý / năm / tuỳ chọn);
+
+|Hệ thống|
+:Truy xuất toàn bộ dữ liệu\ntrong khoảng thời gian đã chọn;
+:Tính toán các chỉ số thống kê:
+- Giá trị trung bình, min, max
+- Xu hướng (tăng/giảm)
+- Tỉ lệ đạt mục tiêu (%);
+
+if (Đủ dữ liệu để tạo báo cáo?) then (Không)
+  :Hiển thị thông báo\n"Cần ít nhất X ngày dữ liệu\nđể tạo báo cáo";
+else (Có)
+  :Tạo biểu đồ tổng hợp\n(cột, đường, tròn);
+  :Hiển thị nhận xét tự động\ndựa trên xu hướng dữ liệu;
+  :Hiển thị điểm sức khỏe tổng thể\nvà so sánh với kỳ trước;
+endif
+
+|Người dùng|
+:Xem báo cáo;
+
+fork
+  :Nhấn vào biểu đồ để xem chi tiết\ntheo ngày/tuần;
+fork again
+  :Nhấn "Xuất báo cáo";
+  |Hệ thống|
+  :Tạo file PDF báo cáo đầy đủ;
+  :Cho phép tải về hoặc chia sẻ;
+fork again
+  |Người dùng|
+  :Nhấn "Chia sẻ với bác sĩ";
+  |Hệ thống|
+  :Tạo liên kết chia sẻ có thời hạn\nhoặc gửi qua email;
+end fork
+
+stop
+@enduml

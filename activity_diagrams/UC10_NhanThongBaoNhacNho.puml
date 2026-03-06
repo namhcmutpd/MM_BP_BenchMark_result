@@ -1,0 +1,54 @@
+@startuml UC10_NhanThongBaoNhacNho
+title Activity Diagram - UC10: Nhận thông báo nhắc nhở
+
+|Người dùng|
+start
+:Đăng nhập thành công;
+:Vào "Cài đặt thông báo";
+
+|Hệ thống|
+:Hiển thị danh sách các loại\nthông báo có thể cấu hình;
+
+|Người dùng|
+:Bật/tắt từng loại thông báo\n(nhắc uống thuốc / nhắc đo chỉ số\n/ nhắc tập thể dục / nhắc uống nước\n/ báo cáo hàng ngày);
+:Cài đặt thời gian nhắc nhở\ncho mỗi loại thông báo;
+:Nhấn "Lưu cài đặt";
+
+|Hệ thống|
+:Lưu cấu hình thông báo vào CSDL;
+:Lên lịch (schedule) các tác vụ\nthông báo theo cài đặt;
+:Hiển thị xác nhận\n"Đã lưu cài đặt thông báo";
+
+note right
+  --- Khi đến giờ nhắc nhở ---
+end note
+
+:Kiểm tra xem thông báo loại này\nđang được bật không;
+if (Thông báo được bật?) then (Không)
+  :Bỏ qua;
+  stop
+else (Có)
+endif
+
+:Kiểm tra người dùng\nchưa thực hiện hành động\ntrong khung giờ đó;
+if (Đã thực hiện rồi?) then (Có)
+  :Bỏ qua thông báo lần này;
+  stop
+else (Không)
+endif
+
+:Gửi push notification\nđến thiết bị người dùng;
+
+|Người dùng|
+:Nhận thông báo trên thiết bị;
+
+if (Người dùng nhấn vào thông báo?) then (Có)
+  |Hệ thống|
+  :Mở ứng dụng và chuyển thẳng\nđến màn hình liên quan\n(nhập chỉ số / uống thuốc / bắt đầu tập);
+else (Không / Bỏ qua)
+  |Hệ thống|
+  :Lưu lại thông báo đã bỏ qua\ntrong trung tâm thông báo;
+endif
+
+stop
+@enduml

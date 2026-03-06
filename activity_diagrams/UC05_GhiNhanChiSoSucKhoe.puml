@@ -1,0 +1,50 @@
+@startuml UC05_GhiNhanChiSoSucKhoe
+title Activity Diagram - UC05: Ghi nhận chỉ số sức khỏe
+
+|Người dùng|
+start
+:Đăng nhập thành công;
+:Chọn mục "Ghi nhận chỉ số";
+:Chọn loại chỉ số cần nhập\n(huyết áp / nhịp tim / đường huyết\n/ cân nặng / nhiệt độ cơ thể / khác);
+
+|Hệ thống|
+:Hiển thị form nhập liệu\ntương ứng với loại chỉ số đã chọn;
+
+|Người dùng|
+:Nhập giá trị chỉ số;
+:Chọn thời điểm đo (mặc định: hiện tại);
+:Thêm ghi chú nếu cần;
+:Nhấn nút "Lưu";
+
+|Hệ thống|
+:Kiểm tra giá trị nằm trong ngưỡng hợp lệ;
+if (Giá trị hợp lệ?) then (Không)
+  :Hiển thị thông báo lỗi\n"Giá trị không hợp lệ";
+  |Người dùng|
+  :Nhập lại giá trị;
+  |Hệ thống|
+else (Có)
+endif
+
+:Lưu chỉ số vào CSDL\nvới timestamp hiện tại;
+:Phân tích chỉ số vừa nhập\nso với ngưỡng bình thường;
+
+if (Chỉ số bất thường?) then (Có)
+  :Hiển thị cảnh báo màu đỏ/cam\nvà lời khuyên y tế cơ bản;
+  if (Chỉ số nguy hiểm cấp độ cao?) then (Có)
+    :Gợi ý người dùng\nliên hệ bác sĩ ngay;
+  else (Không)
+  endif
+else (Không)
+  :Hiển thị biểu tượng ✓ màu xanh\n"Chỉ số bình thường";
+endif
+
+:Cập nhật biểu đồ lịch sử\nvà Dashboard;
+:Kiểm tra xem có vượt\nngưỡng mục tiêu đã đặt không;
+if (Đạt mục tiêu?) then (Có)
+  :Gửi thông báo chúc mừng;
+else (Không)
+endif
+
+stop
+@enduml

@@ -1,0 +1,49 @@
+@startuml UC07_DatMucTieuSucKhoe
+title Activity Diagram - UC07: Đặt mục tiêu sức khỏe
+
+|Người dùng|
+start
+:Đăng nhập thành công;
+:Chọn mục "Mục tiêu sức khỏe";
+
+|Hệ thống|
+:Hiển thị danh sách mục tiêu hiện tại\nvà gợi ý mục tiêu phù hợp\ndựa trên hồ sơ người dùng;
+
+|Người dùng|
+:Nhấn "Thêm mục tiêu mới";
+:Chọn loại mục tiêu\n(cân nặng / huyết áp / số bước/ngày\n/ calories / thời gian tập luyện / khác);
+
+|Hệ thống|
+:Hiển thị form nhập mục tiêu\ntương ứng với loại đã chọn;
+
+|Người dùng|
+:Nhập giá trị mục tiêu\nvà thời hạn đạt mục tiêu;
+:Nhấn "Lưu mục tiêu";
+
+|Hệ thống|
+:Kiểm tra tính hợp lệ\n(giá trị trong khoảng cho phép,\nthời hạn > ngày hiện tại);
+if (Dữ liệu hợp lệ?) then (Không)
+  :Hiển thị lỗi và yêu cầu\nnhập lại;
+  |Người dùng|
+  :Sửa lại thông tin;
+  |Hệ thống|
+else (Có)
+endif
+
+:So sánh mục tiêu với dữ liệu\nsức khỏe hiện tại;
+if (Mục tiêu có thực tế\nvà an toàn không?) then (Không thực tế)
+  :Hiển thị cảnh báo\nvà lời khuyên điều chỉnh;
+  |Người dùng|
+  :Xem xét điều chỉnh\nhoặc giữ nguyên;
+  |Hệ thống|
+else (Có)
+endif
+
+:Lưu mục tiêu vào CSDL;
+:Tính toán tiến độ hiện tại (% đã đạt được);
+:Thiết lập lịch nhắc nhở định kỳ\ncho mục tiêu này;
+:Hiển thị màn hình mục tiêu\nvới thanh tiến độ;
+:Hiển thị thông báo\n"Đã lưu mục tiêu thành công!";
+
+stop
+@enduml

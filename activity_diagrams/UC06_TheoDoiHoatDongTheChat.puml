@@ -1,0 +1,49 @@
+@startuml UC06_TheoDoiHoatDongTheChat
+title Activity Diagram - UC06: Theo dõi hoạt động thể chất
+
+|Người dùng|
+start
+:Đăng nhập thành công;
+:Chọn mục "Hoạt động thể chất";
+:Chọn loại hoạt động\n(chạy bộ / đi bộ / đạp xe\n/ bơi lội / gym / yoga / khác);
+
+|Hệ thống|
+:Hiển thị màn hình theo dõi\nhoạt động tương ứng;
+
+|Người dùng|
+:Nhấn nút "Bắt đầu";
+
+|Hệ thống|
+fork
+  :Bắt đầu tính thời gian;
+fork again
+  :Kích hoạt cảm biến\n(GPS / gia tốc kế / nhịp tim);
+fork again
+  :Hiển thị chỉ số thời gian thực\n(thời gian, quãng đường, tốc độ, nhịp tim);
+end fork
+
+repeat
+  :Cập nhật dữ liệu theo thời gian thực;
+  :Lưu điểm GPS (nếu có);
+repeat while (Người dùng nhấn "Dừng"?) is (Không)
+-> Có;
+
+|Người dùng|
+:Nhấn nút "Kết thúc" hoặc "Dừng";
+
+|Hệ thống|
+:Tính toán kết quả tổng hợp\n(tổng quãng đường, thời gian, calories,\ntốc độ trung bình, nhịp tim TB);
+:Lưu kết quả hoạt động vào CSDL;
+:Hiển thị màn hình tổng kết hoạt động\n(biểu đồ tốc độ, nhịp tim theo thời gian,\nbản đồ lộ trình nếu có GPS);
+:Cập nhật tổng calories trong ngày;
+:Kiểm tra thành tích / huy hiệu mới;
+if (Đạt thành tích mới?) then (Có)
+  :Hiển thị thông báo\nkèm huy hiệu thành tích;
+else (Không)
+endif
+
+|Người dùng|
+:Thêm ghi chú hoặc chia sẻ kết quả (tuỳ chọn);
+
+stop
+@enduml

@@ -1,0 +1,59 @@
+@startuml UC11_QuanLyLichUongThuoc
+title Activity Diagram - UC11: Quản lý lịch uống thuốc
+
+|Người dùng|
+start
+:Đăng nhập thành công;
+:Chọn mục "Lịch uống thuốc";
+
+|Hệ thống|
+:Hiển thị danh sách thuốc đang dùng\nvà lịch uống thuốc hôm nay;
+
+|Người dùng|
+:Nhấn "Thêm thuốc mới";
+:Nhập thông tin thuốc:
+- Tên thuốc
+- Liều lượng (mg / ml / viên)
+- Tần suất (ngày / tuần)
+- Giờ uống
+- Ngày bắt đầu và kết thúc;
+:Nhấn "Lưu";
+
+|Hệ thống|
+:Kiểm tra thông tin hợp lệ;
+if (Thông tin hợp lệ?) then (Không)
+  :Hiển thị lỗi;
+  |Người dùng|
+  :Sửa lại;
+  |Hệ thống|
+else (Có)
+endif
+
+:Lưu thông tin thuốc vào CSDL;
+:Tạo lịch nhắc uống thuốc\ntheo cài đặt đã nhập;
+:Hiển thị thuốc trong\nCalendar & danh sách;
+:Hiển thị thông báo\n"Đã thêm thuốc thành công!";
+
+note right
+  --- Khi đến giờ uống thuốc ---
+end note
+
+:Gửi push notification\n"Nhắc uống thuốc: [tên thuốc] [liều lượng]";
+
+|Người dùng|
+:Nhấn vào thông báo;
+:Xác nhận đã uống thuốc\nhoặc Bỏ qua / Nhắc lại sau;
+
+|Hệ thống|
+if (Xác nhận đã uống?) then (Có)
+  :Ghi nhận đã uống thuốc\nvào lịch sử;
+  :Đánh dấu ✓ trong lịch;
+else (Nhắc lại sau)
+  :Thiết lập nhắc lại\nsau 15 phút;
+endif
+
+:Tính toán tỉ lệ tuân thủ\nuống thuốc (%);
+:Cập nhật màn hình Tổng quan;
+
+stop
+@enduml

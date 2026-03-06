@@ -1,0 +1,112 @@
+@startuml UC_QuanLyBaiDo_Improved
+' ─────────────────────────────────────────────────────────────────────
+'  Improved Use Case Diagram – Quản lý bãi đỗ (Smart Parking)
+'  Fixes compared to submitted diagram:
+'    1. "Thêm/Xóa bãi đỗ" split into two separate use cases
+'    2. "Đóng/mở bãi đỗ" split into two separate use cases
+'    3. <<include>> added from ALL state-changing UCs → "Đồng bộ dữ liệu"
+'    4. <<extend>> added to model conditional behavior (notifications, validation)
+'    5. Missing use cases added: Tìm kiếm, Quản lý khu vực/slot, Đặt giá, Xem báo cáo
+'    6. Actor "System" renamed to specific external system name
+'    7. "Đồng bộ dữ liệu" clarified as internal shared UC, not standalone
+' ─────────────────────────────────────────────────────────────────────
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor WhiteSmoke
+  BorderColor DarkSlateGray
+  ArrowColor DarkSlateGray
+}
+skinparam actor {
+  BackgroundColor LightYellow
+}
+
+actor "Admin" as Admin
+actor "Mobile App Backend\n(Cloud Platform)" as Platform
+
+rectangle "Quản lý bãi đỗ" {
+
+  ' ── Core CRUD ──────────────────────────────────────────────────────
+  usecase "Thêm bãi đỗ mới" as UC_Add
+  usecase "Xóa / Gỡ bãi đỗ" as UC_Remove
+  usecase "Tìm kiếm / Xem\nthông tin bãi đỗ" as UC_View
+
+  ' ── Lifecycle ──────────────────────────────────────────────────────
+  usecase "Mở cửa / Kích hoạt\nbãi đỗ" as UC_Open
+  usecase "Đóng cửa bãi đỗ" as UC_Close
+
+  ' ── Info & layout management ───────────────────────────────────────
+  usecase "Cập nhật thông tin\nbãi đỗ" as UC_UpdateInfo
+  usecase "Cập nhật sơ đồ\nvị trí đỗ xe" as UC_UpdateMap
+  usecase "Quản lý khu vực /\nslot đỗ xe" as UC_Zone
+
+  ' ── Real-time status ───────────────────────────────────────────────
+  usecase "Cập nhật tình trạng\nbãi đỗ (occupancy)" as UC_UpdateStatus
+
+  ' ── Business ───────────────────────────────────────────────────────
+  usecase "Thiết lập giá /\nphí đỗ xe" as UC_Pricing
+
+  ' ── Reporting ──────────────────────────────────────────────────────
+  usecase "Xem báo cáo &\nthống kê bãi đỗ" as UC_Report
+
+  ' ── Shared sub-function (used via <<include>>) ─────────────────────
+  usecase "Đồng bộ dữ liệu\nvới hệ thống" as UC_Sync
+
+  ' ── Conditional extensions ─────────────────────────────────────────
+  usecase "Gửi thông báo\nbãi đầy / mở lại" as UC_Notify
+  usecase "Kiểm tra đặt chỗ\nđang hoạt động" as UC_CheckBooking
+}
+
+' ── Actor associations ──────────────────────────────────────────────
+Admin --> UC_Add
+Admin --> UC_Remove
+Admin --> UC_View
+Admin --> UC_Open
+Admin --> UC_Close
+Admin --> UC_UpdateInfo
+Admin --> UC_UpdateMap
+Admin --> UC_Zone
+Admin --> UC_UpdateStatus
+Admin --> UC_Pricing
+Admin --> UC_Report
+
+' Platform is an external system that:
+'   - receives data sync pushes
+'   - sends back status updates from IoT sensors
+Platform --> UC_Sync
+Platform --> UC_Notify
+
+' ── <<include>> relationships ────────────────────────────────────────
+' ALL state-changing operations must sync data
+UC_Add          .> UC_Sync : <<include>>
+UC_Remove       .> UC_Sync : <<include>>
+UC_Open         .> UC_Sync : <<include>>
+UC_Close        .> UC_Sync : <<include>>
+UC_UpdateInfo   .> UC_Sync : <<include>>
+UC_UpdateMap    .> UC_Sync : <<include>>
+UC_UpdateStatus .> UC_Sync : <<include>>
+
+' Zone management requires map update
+UC_Zone .> UC_UpdateMap : <<include>>
+
+' ── <<extend>> relationships (arrow FROM extension TO base) ──────────
+' Notification is sent ONLY when status changes make the lot full or available
+UC_Notify .> UC_UpdateStatus : <<extend>>\n(on_capacity_change)
+UC_Notify .> UC_Open         : <<extend>>\n(on_open)
+UC_Notify .> UC_Close        : <<extend>>\n(on_close)
+
+' Before removing a lot, check for active bookings (conditional validation)
+UC_CheckBooking .> UC_Remove : <<extend>>\n(on_active_bookings)
+
+note bottom of UC_Sync
+  ⚠️  Trong diagram gốc, chỉ "Cập nhật tình trạng" có <<include>> Đồng bộ dữ liệu.
+  Điều này sai nghiệp vụ: MỌI hành động thay đổi trạng thái bãi đỗ đều phải sync.
+end note
+
+note bottom of UC_CheckBooking
+  ⚠️  <<extend>> đi TỪ extension use case → ĐẾN base use case.
+  Tức là: [Kiểm tra đặt chỗ] → [Xóa bãi đỗ], không phải chiều ngược lại.
+end note
+
+@enduml

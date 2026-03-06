@@ -1,0 +1,79 @@
+@startuml UC_DongBoDuLieu
+title Activity Diagram – UC: Đồng bộ dữ liệu
+
+|Người dùng / Hệ thống|
+start
+note right
+  Đồng bộ có thể được kích hoạt:
+  (1) Tự động theo lịch định kỳ
+  (2) Thủ công bởi người dùng
+  (3) Khi thiết bị vừa kết nối lại
+end note
+
+|Người dùng|
+:Nhấn "Đồng bộ ngay"\nhoặc hệ thống tự kích hoạt;
+
+|Hệ thống|
+:Kiểm tra kết nối mạng;
+if (Có kết nối Internet?) then (Không)
+  :Hiển thị thông báo\n"Không có kết nối mạng.\nDữ liệu sẽ đồng bộ khi có mạng";
+  :Lưu yêu cầu đồng bộ\nvào hàng chờ (queue);
+  stop
+else (Có)
+endif
+
+:Kiểm tra trạng thái kết nối\nvới các thiết bị đã ghép nối;
+
+fork
+  :─── Đồng bộ từ thiết bị đeo → App ───;
+  if (Thiết bị đang kết nối?) then (Có)
+    :Gửi lệnh yêu cầu\ntruyền dữ liệu lên thiết bị;
+    :Nhận dữ liệu thô\n(raw data) từ thiết bị\n(nhịp tim, bước chân, SpO2, \nhuyết áp, giấc ngủ...);
+    :Kiểm tra tính toàn vẹn dữ liệu\n(checksum / data integrity);
+    if (Dữ liệu hợp lệ?) then (Không)
+      :Ghi log lỗi dữ liệu bị hỏng;
+      :Yêu cầu thiết bị\ngửi lại dữ liệu;
+    else (Có)
+      :Giải mã và chuẩn hoá\ndữ liệu thô;
+      :Lưu vào CSDL cục bộ\n(local storage);
+    endif
+  else (Không)
+    :Ghi log: thiết bị offline\ntrong lần đồng bộ này;
+  endif
+
+fork again
+  :─── Đồng bộ App → Máy chủ đám mây ───;
+  :Lấy tất cả dữ liệu mới\nchưa được đồng bộ lên server\n(dựa theo timestamp cuối đồng bộ);
+  if (Có dữ liệu mới cần đẩy lên?) then (Có)
+    :Nén và mã hoá dữ liệu;
+    :Gửi payload lên\nAPI máy chủ;
+    if (Server nhận thành công?) then (Không)
+      :Thử lại tối đa 3 lần\nvới back-off delay;
+      if (Vẫn thất bại sau 3 lần?) then (Có)
+        :Lưu vào hàng chờ\nđể đồng bộ sau;
+        :Hiển thị cảnh báo\n"Đồng bộ đám mây thất bại";
+      else (Thành công)
+      endif
+    else (Có)
+      :Cập nhật timestamp\nđồng bộ cuối thành công;
+    endif
+  else (Không)
+    :Bỏ qua bước này;
+  endif
+end fork
+
+:Kiểm tra xem server có dữ liệu\nmới để kéo về (pull) không\n(cài đặt, mục tiêu, từ bác sĩ...);
+if (Có dữ liệu mới từ server?) then (Có)
+  :Tải dữ liệu mới về\nvà cập nhật CSDL cục bộ;
+  :Làm mới giao diện ứng dụng;
+else (Không)
+endif
+
+:Ghi lại thời gian\nđồng bộ thành công;
+:Cập nhật trạng thái\n"Đồng bộ lúc [thời gian]"\ntrên màn hình chính;
+
+|Người dùng|
+:Nhận thông báo\n"Đồng bộ hoàn tất";
+
+stop
+@enduml

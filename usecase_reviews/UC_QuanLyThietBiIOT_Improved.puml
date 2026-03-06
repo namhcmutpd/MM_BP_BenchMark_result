@@ -1,0 +1,89 @@
+@startuml UC_QuanLyThietBiIOT_Improved
+' ─────────────────────────────────────────────────────────────────────
+'  Improved Use Case Diagram – Quản lý thiết bị IoT (Smart Parking)
+'  Fixes compared to submitted diagram:
+'    1. <<extend>> arrow direction corrected
+'    2. "Thông báo lỗi" extends from ALL relevant base use cases
+'    3. "Thêm/Xóa thiết bị" split into two separate use cases
+'    4. <<include>> added: "Cập nhật trạng thái" includes "Kiểm tra kết nối"
+'    5. Missing use cases added: Cấu hình, Gán vị trí, Xem nhật ký, Cập nhật firmware
+'    6. Actor "System" renamed to specific external system name
+'    7. Extension point declared on base use case (UML 2.x compliance)
+' ─────────────────────────────────────────────────────────────────────
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor WhiteSmoke
+  BorderColor DarkSlateGray
+  ArrowColor DarkSlateGray
+}
+skinparam actor {
+  BackgroundColor LightYellow
+}
+
+actor "Admin" as Admin
+actor "IoT Gateway /\nMonitoring Service" as Gateway
+
+rectangle "Quản lý thiết bị IoT" {
+
+  ' ── Core CRUD ──────────────────────────────────────────────────────
+  usecase "Thêm thiết bị mới" as UC_Add
+  usecase "Xóa / Gỡ thiết bị" as UC_Remove
+
+  ' ── Lifecycle management ───────────────────────────────────────────
+  usecase "Kích hoạt thiết bị" as UC_Activate
+  usecase "Vô hiệu hóa thiết bị" as UC_Deactivate
+  usecase "Cấu hình thiết bị\n(ngưỡng, tần suất, giao thức)" as UC_Config
+  usecase "Gán thiết bị vào\nvị trí đỗ xe" as UC_Assign
+
+  ' ── Monitoring ─────────────────────────────────────────────────────
+  usecase "Cập nhật trạng thái\nthiết bị" as UC_UpdateStatus
+  usecase "Kiểm tra tình trạng\nkết nối\n--\nextension points:\n  on_error" as UC_CheckConn
+  usecase "Xem nhật ký /\nlịch sử thiết bị" as UC_Logs
+
+  ' ── Maintenance ────────────────────────────────────────────────────
+  usecase "Cập nhật firmware\n(OTA Update)" as UC_Firmware
+
+  ' ── Conditional extension ─────────────────────────────────────────
+  usecase "Thông báo lỗi\nvà cảnh báo" as UC_Alert
+}
+
+' ── Actor associations ──────────────────────────────────────────────
+Admin --> UC_Add
+Admin --> UC_Remove
+Admin --> UC_Activate
+Admin --> UC_Deactivate
+Admin --> UC_Config
+Admin --> UC_Assign
+Admin --> UC_UpdateStatus
+Admin --> UC_CheckConn
+Admin --> UC_Logs
+Admin --> UC_Firmware
+
+' IoT Gateway / Monitoring Service is an external system that:
+'   - triggers connection checks periodically
+'   - receives alert notifications
+Gateway --> UC_CheckConn
+Gateway --> UC_Alert
+
+' ── <<include>> relationships ────────────────────────────────────────
+' Updating status ALWAYS requires checking connection first
+UC_UpdateStatus .> UC_CheckConn : <<include>>
+
+' Assigning a device to a slot requires the device to be configured
+UC_Assign .> UC_Config : <<include>>
+
+' ── <<extend>> relationships (arrow FROM extension TO base) ──────────
+' Alert is triggered ONLY when an error condition is detected (optional)
+UC_Alert .> UC_CheckConn   : <<extend>>\n(on_error)
+UC_Alert .> UC_Activate    : <<extend>>\n(on_failure)
+UC_Alert .> UC_Firmware    : <<extend>>\n(on_failure)
+
+note bottom of UC_Alert
+  ⚠️  Chiều mũi tên <<extend>>:
+  Extension Use Case → Base Use Case
+  (ngược lại so với diagram gốc đã nộp)
+end note
+
+@enduml

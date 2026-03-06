@@ -1,0 +1,74 @@
+@startuml UC_QuanLiThietBi
+title Activity Diagram – UC: Quản lí thiết bị
+
+|Người dùng|
+start
+:Mở ứng dụng và đăng nhập thành công;
+:Chọn mục "Thiết bị";
+
+|Hệ thống|
+:Hiển thị danh sách thiết bị\nđã ghép nối;
+
+|Người dùng|
+:Chọn hành động\n(Thêm thiết bị / Xem chi tiết\n/ Đổi tên / Xoá thiết bị);
+
+fork
+  :─── Thêm thiết bị mới ───;
+  :Bật Bluetooth / WiFi\ntrên điện thoại;
+
+  |Hệ thống|
+  :Quét các thiết bị gần đó;
+  if (Tìm thấy thiết bị?) then (Không)
+    :Hiển thị thông báo\n"Không tìm thấy thiết bị nào";
+    |Người dùng|
+    :Kiểm tra nguồn điện\nvà kết nối lại;
+    |Hệ thống|
+  else (Có)
+    :Hiển thị danh sách\nthiết bị tìm thấy;
+    |Người dùng|
+    :Chọn thiết bị muốn ghép nối;
+    |Hệ thống|
+    :Thực hiện bắt tay kết nối\n(pairing/handshake);
+    if (Kết nối thành công?) then (Không)
+      :Hiển thị thông báo lỗi\n"Ghép nối thất bại";
+      |Người dùng|
+      :Thử lại hoặc bỏ qua;
+      |Hệ thống|
+    else (Có)
+      :Lưu thông tin thiết bị\nvào CSDL (ID, tên, loại, trạng thái);
+      :Hiển thị thông báo\n"Ghép nối thành công!";
+      :Bắt đầu nhận dữ liệu\ntừ thiết bị mới;
+    endif
+  endif
+
+fork again
+  :─── Xem chi tiết thiết bị ───;
+  |Hệ thống|
+  :Hiển thị thông tin thiết bị\n(tên, loại, firmware,\nmức pin, lần đồng bộ cuối);
+
+fork again
+  :─── Đổi tên thiết bị ───;
+  |Người dùng|
+  :Nhập tên mới;
+  |Hệ thống|
+  :Cập nhật tên thiết bị\ntrong CSDL;
+  :Hiển thị tên mới\ntrong danh sách;
+
+fork again
+  :─── Xoá thiết bị ───;
+  |Hệ thống|
+  :Hiển thị hộp thoại xác nhận\n"Bạn có chắc muốn xoá?";
+  |Người dùng|
+  if (Xác nhận xoá?) then (Có)
+    |Hệ thống|
+    :Huỷ kết nối Bluetooth/WiFi\nvới thiết bị;
+    :Xoá thiết bị khỏi CSDL;
+    :Xoá toàn bộ dữ liệu\nliên quan đến thiết bị;
+    :Hiển thị thông báo\n"Đã xoá thiết bị thành công";
+  else (Không)
+    :Huỷ thao tác;
+  endif
+end fork
+
+stop
+@enduml
